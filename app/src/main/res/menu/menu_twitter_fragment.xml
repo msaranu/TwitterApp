@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/show_icon"
+        android:orderInCategory="100"
+        android:title="Twitter Icon"
+        android:icon="@drawable/ic_twitter_egg"
+        />
+
+    <item
+        android:id="@+id/action_close"
+        android:orderInCategory="100"
+        android:title="Close Dialog"
+        android:icon="@drawable/ic_xsign"
+        app:showAsAction="always" />
+
+</menu>

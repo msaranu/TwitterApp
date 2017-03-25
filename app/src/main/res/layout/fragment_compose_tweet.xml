@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tbTwitter"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"
+        android:background="@color/white">
+    </android.support.v7.widget.Toolbar>
+
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/tbTwitter"
+        app:srcCompat="@drawable/ic_launcher"
+        android:id="@+id/ivTweetImage" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@id/ivTweetImage"
+        android:layout_below="@id/tbTwitter"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvUserName" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_toRightOf="@id/ivTweetImage"
+        android:layout_below="@id/ivTweetImage"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvBody" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginStart="30dp"
+        android:id="@+id/etReplyTweet" />
+
+    <TextView
+        android:text="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etReplyTweet"
+        android:layout_alignRight="@+id/etReplyTweet"
+        android:layout_alignEnd="@+id/etReplyTweet"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="55dp"
+        android:id="@+id/tvCharsLeft" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etReplyTweet"
+        android:layout_toRightOf="@+id/tvCharsLeft"
+        android:layout_toEndOf="@+id/tvCharsLeft"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="37dp"
+        android:id="@+id/btTweetReply" />
+
+
+</RelativeLayout>
