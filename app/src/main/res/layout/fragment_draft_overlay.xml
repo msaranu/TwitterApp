@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true">
+
+    <Button
+        android:text="Delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:textSize="15dp"
+        android:textAllCaps="false"
+        android:id="@+id/btnDelete" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/btnDelete"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/seperatorview" />
+
+    <Button
+        android:text="Save draft"
+        android:layout_width="match_parent"
+        android:layout_below="@id/seperatorview"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:textAllCaps="false"
+        android:id="@+id/btnSaveDraft" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/btnSaveDraft"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/seperatorview2" />
+
+
+    <Button
+        android:text="Cancel"
+        android:layout_width="match_parent"
+        android:textSize="15dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/seperatorview2"
+        android:textAllCaps="false"
+        android:id="@+id/btnCancel" />
+
+
+    </RelativeLayout>

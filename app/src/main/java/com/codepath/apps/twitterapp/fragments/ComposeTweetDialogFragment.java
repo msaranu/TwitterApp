@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,13 +25,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.codepath.apps.twitterapp.R;
+import com.codepath.apps.twitterapp.models.Draft;
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.services.TweetOfflineService;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class ComposeTweetDialogFragment extends DialogFragment {
+public class ComposeTweetDialogFragment extends DialogFragment implements MyAlertDialogFragment.MyAlertDialogFragmentListener {
 
     @BindView(R.id.tbTwitter) public Toolbar tbTwitter;
 
@@ -84,7 +89,18 @@ public class ComposeTweetDialogFragment extends DialogFragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getItemId() == R.id.action_close){
-                            getDialog().dismiss();
+                           // getDialog().dismiss();
+                            if(etReplyTweet.getText() !=null) {
+                                FragmentManager fm = getFragmentManager();
+                                MyAlertDialogFragment fdf = MyAlertDialogFragment.newInstance();
+                                fdf.setTargetFragment(ComposeTweetDialogFragment.this, 300);
+                                fdf.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme);
+                                fdf.show(fm, "FRAGMENT_MODAL_ALERT");
+                            }else{
+                                dismiss();
+                            }
+
+
                         }
                         // Handle the menu item
                         return true;
@@ -143,7 +159,12 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         if (bundle != null ) {
             tweet = bundle.getParcelable("TWEET_OBJ");
 
-            etReplyTweet.setText(tweet.getText());
+            List draftListfromDB = TweetOfflineService.retrieveTweetDraft();
+            if(draftListfromDB!=null && draftListfromDB.size() !=0) {
+                String draftString = ((Draft)(draftListfromDB.get(0))).getDraftText().toString();
+                etReplyTweet.setText(draftString);
+                etReplyTweet.setSelection(draftString.length()+1);
+            }
 
             etReplyTweet.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -178,6 +199,29 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         TweetDetailDialogFragment.ComposeTweetDialogListener listener = (TweetDetailDialogFragment.ComposeTweetDialogListener) getActivity();
         listener.onFinishComposeTweetDialog(etReplyTweet.getText().toString(), tweet);
         dismiss();
+
+    }
+
+    @Override
+    public void onFinishAlertDialog( boolean dismiss) {
+
+        if(dismiss){
+            TweetOfflineService.deleteTweetDraft();
+            dismiss();
+        }else{
+            saveDrafttoDB();
+             dismiss();
+
+
+        }
+    }
+
+    private void saveDrafttoDB() {
+        String draftString = etReplyTweet.getText().toString();
+        TweetOfflineService.deleteTweetDraft();
+        Draft draft = new Draft();
+        draft.setDraftText(draftString);
+        draft.save();
 
     }
 }

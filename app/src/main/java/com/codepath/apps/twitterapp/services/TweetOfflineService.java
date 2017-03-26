@@ -1,5 +1,6 @@
 package com.codepath.apps.twitterapp.services;
 
+import com.codepath.apps.twitterapp.models.Draft;
 import com.codepath.apps.twitterapp.models.Tweet;
 import com.codepath.apps.twitterapp.models.User;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -40,5 +41,16 @@ public class TweetOfflineService {
 
         List<User> userList3= SQLite.select().
                 from(User.class).queryList();
+    }
+
+    public static List<Draft> retrieveTweetDraft(){
+        List<Draft> tweetDraft=   SQLite.select().
+                from(Draft.class).queryList();
+        return tweetDraft;
+    }
+
+    public static void deleteTweetDraft(){
+         SQLite.delete().
+                from(Draft.class).async().execute();
     }
 }
