@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.models.Tweet;
-import com.malmstein.fenster.controller.FensterPlayerControllerVisibilityListener;
-import com.malmstein.fenster.view.FensterVideoView;
 
 import java.util.List;
 
@@ -23,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by Saranu on 3/21/17.
  */
 
-public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FensterPlayerControllerVisibilityListener {
+public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     RecyclerView mRecyclerView;
     private List<Tweet> mTweets;
@@ -124,24 +122,28 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
           vh.tvUserName.setText(tweet.getUser().getName());
           vh.tvBody.setText(tweet.getText());
-        vh.tvHandle.setText("@"+tweet.getUser().getScreenName());
+        vh.tvHandle.setText(tweet.getUser().getScreenName());
         vh.tvTime.setText("1hr");//TODO: Convert to time
-     /*   ImageView ivMedia = vh.ivMedia;
+        ImageView ivMedia = vh.ivMedia;
         ivMedia.setImageResource(0);
         if(tweet.getEntities() != null && tweet.getEntities().getMedia()
                 !=null ){
             String mUrl = tweet.getEntities().getMedia().get(0).getMediaUrl();
             Glide.with(mContext).load(mUrl).placeholder(R.drawable.ic_launcher).
                     error(R.drawable.ic_launcher).into(ivMedia);
-        } */
+        }
 
-
-                 //  String mUrl = tweet.getEntities().getMedia().get(0).getExpandedUrl();
-             //   vh.fullSreenMediaPlayerController.setVisibilityListener(this);
-             //   vh.textureView.setMediaController(vh.fullSreenMediaPlayerController);
-              //  vh.textureView.setOnPlayStateListener(vh.fullSreenMediaPlayerController);
-                vh.textureView.setVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
-                vh.textureView.start();
+        if(tweet.getEntities() != null && tweet.getEntities().getMedia()
+                !=null ) {
+            if(tweet.getEntities().getMedia().get(0).getExpandedUrl().contains("video")) {
+                //  String mUrl = tweet.getEntities().getMedia().get(0).getExpandedUrl();
+                //   vh.fullSreenMediaPlayerController.setVisibilityListener(this);
+                //   vh.textureView.setMediaController(vh.fullSreenMediaPlayerController);
+                //  vh.textureView.setOnPlayStateListener(vh.fullSreenMediaPlayerController);
+            //    vh.textureView.setVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
+             //   vh.textureView.start();
+            }
+        }
 
 
     }
@@ -150,26 +152,6 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         vhImage.tvUserName.setText(tweet.getUser().getScreenName());
         vhImage.tvBody.setText(tweet.getText());
     }
-
-    @Override
-    public void onControlsVisibilityChange(boolean value) {
-        setSystemUiVisibility(value);
-
-    }
-    private void setSystemUiVisibility(final boolean visible) {
-        int newVis = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
-
-        if (!visible) {
-            newVis |= View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        }
-
-    }
-
-
 
 
     // Provide a direct reference to each of the views within a data item
@@ -183,14 +165,23 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @BindView(R.id.tvDot) public TextView tvDot;
         @BindView(R.id.tvTime) public TextView tvTime;
         @BindView(R.id.tvBody) public TextView tvBody;
-      //  @BindView(R.id.ivMedia) public ImageView ivMedia;
+        @BindView(R.id.ivMedia) public ImageView ivMedia;
         @BindView(R.id.ivReply) public ImageView ivReply;
         @BindView(R.id.ivRetweet) public ImageView ivRetweet;
         @BindView(R.id.tvRetweeted) public TextView tvRetweeted;
         @BindView(R.id.ivFavorite) public ImageView ivFavorite;
         @BindView(R.id.tvFavorited) public TextView tvFavorited;
-        @BindView(R.id.ivMedia) public FensterVideoView textureView;
+    //    @BindView(R.id.ivMedia) public FensterVideoView textureView;
       //  @BindView(R.id.ivMedia) public SimpleMediaFensterPlayerController fullSreenMediaPlayerController;
+
+
+        public ImageView getIvMedia() {
+            return ivMedia;
+        }
+
+        public void setIvMedia(ImageView ivMedia) {
+            this.ivMedia = ivMedia;
+        }
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -293,13 +284,6 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.tvFavorited = tvFavorited;
         }
 
-        public FensterVideoView getTextureView() {
-            return textureView;
-        }
-
-        public void setTextureView(FensterVideoView textureView) {
-            this.textureView = textureView;
-        }
 
        /* public SimpleMediaFensterPlayerController getMediaFensterPlayerController() {
             return fullSreenMediaPlayerController;

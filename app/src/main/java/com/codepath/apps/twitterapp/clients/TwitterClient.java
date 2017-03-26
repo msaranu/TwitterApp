@@ -48,7 +48,7 @@ public class TwitterClient extends OAuthBaseClient {
         }else{ //pull to refresh or first page
             params.put("since_id", 1);
         }
-		params.put("count", 3);
+		params.put("count", 15);
 		client.get(apiUrl, params, handler);
 
 	}

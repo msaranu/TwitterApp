@@ -4,9 +4,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view_toolbar" />
+
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="12dp"
         app:srcCompat="@drawable/ic_launcher"
         android:id="@+id/ivTweetImage" />
 
@@ -14,36 +22,41 @@
         android:text="User Name"
         android:layout_width="wrap_content"
         android:textStyle="bold"
+        android:textColor="@color/black"
         android:layout_height="wrap_content"
         android:id="@+id/tvUserName"
         android:layout_toRightOf="@+id/ivTweetImage"
-        android:layout_toEndOf="@+id/ivTweetImage" />
-
+        android:layout_toEndOf="@+id/ivTweetImage"
+        android:layout_alignTop="@id/ivTweetImage"/>
 
     <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         app:srcCompat="@drawable/twitterverified"
         android:id="@+id/ivVerified"
+        android:layout_marginTop="2dp"
         android:layout_toRightOf="@+id/tvUserName"
-        android:layout_toEndOf="@+id/tvUserName" />/>
+        android:layout_toEndOf="@+id/tvUserName" />
 
     <TextView
         android:text="Handle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvHandle"
+        android:textSize="12sp"
         android:layout_toRightOf="@+id/ivVerified"
         android:layout_toEndOf="@+id/ivVerified"
+        android:layout_alignTop="@id/ivTweetImage"
         />
 
     <TextView
-        android:text="."
+        android:text=" . "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvDot"
-        android:layout_toRightOf="@+id/ivVerified"
-        android:layout_toEndOf="@+id/ivVerified"
+        android:layout_toRightOf="@+id/tvHandle"
+        android:layout_toEndOf="@+id/tvHandle"
+        android:layout_alignBottom="@id/tvHandle"
         />
 
     <TextView
@@ -51,8 +64,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTime"
-        android:layout_toRightOf="@+id/tvHandle"
-        android:layout_toEndOf="@+id/tvHandle"
+        android:layout_toRightOf="@+id/tvDot"
+        android:layout_toEndOf="@+id/tvDot"
+        android:layout_alignTop="@id/ivTweetImage"
        />
 
     <TextView
@@ -60,21 +74,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvBody"
+        android:textColor="@color/black"
+        android:autoLink="web"
+        android:textColorLink="@color/blue"
+        android:textColorHighlight="@color/blue"
         android:layout_below="@+id/tvUserName"
         android:layout_alignLeft="@id/tvUserName"
         android:layout_alignStart="@id/tvUserName"
          />
 
-    <!--<ImageView
-        android:layout_width="400dp"
-        android:layout_height="200dp"
+    <ImageView
+        android:layout_width="290dp"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
         android:layout_below="@+id/tvBody"
         android:layout_alignLeft="@id/tvBody"
         android:layout_alignStart="@id/tvBody"
+        android:layout_marginTop="10dp"
         app:srcCompat="@drawable/ic_launcher"
-        android:id="@+id/ivMedia" /> -->
+        android:id="@+id/ivMedia" />
 
-    <com.malmstein.fenster.view.FensterVideoView
+  <!--  <com.malmstein.fenster.view.FensterVideoView
         android:id="@+id/ivMedia"
         android:layout_width="wrap_content"
         android:layout_below="@+id/tvBody"
@@ -84,7 +105,7 @@
         android:keepScreenOn="true"
         android:fitsSystemWindows="true" />
 
-  <!--  <com.malmstein.fenster.controller.SimpleMediaFensterPlayerController
+    <com.malmstein.fenster.controller.SimpleMediaFensterPlayerController
         android:id="@+id/ivMedia"
         android:layout_width="wrap_content"
         android:layout_below="@+id/tvBody"
@@ -97,7 +118,7 @@
 
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_below="@+id/ivMedia"
         android:layout_alignLeft="@id/ivMedia"
@@ -139,9 +160,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvFavorited"
         android:layout_below="@+id/ivMedia"
+        android:layout_marginBottom="10dp"
         android:layout_toRightOf="@+id/ivFavorite"
         android:layout_toEndOf="@+id/ivFavorite"
       />
+
 
 
 </RelativeLayout>

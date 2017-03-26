@@ -1,6 +1,7 @@
 package com.codepath.apps.twitterapp.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -194,12 +195,22 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
 
     private void callTwitterAPI(int page) {
 
-        boolean offline = true;
+        boolean offline = false;
         if (!offline && NetworkUtil.isInternetAvailable(getApplicationContext()) && NetworkUtil.isOnline()) {
             populateTimeline(page);
         } else {
             tweets.addAll(TweetOfflineService.retrieveTweetsOffline());
-            adapter.notifyDataSetChanged();
+
+            Handler handler = new Handler();
+
+            final Runnable r = new Runnable() {
+                public void run() {
+                    adapter.notifyDataSetChanged();
+
+                }
+            };
+
+            handler.post(r);
             Toast.makeText(TimelineActivity.this, "Retreiving Tweets Offline from: ",
                     Toast.LENGTH_LONG).show();
        //     swipeContainer.setRefreshing(false);

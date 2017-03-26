@@ -5,10 +5,13 @@ package com.codepath.apps.twitterapp.fragments;
  */
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,13 +34,32 @@ import butterknife.ButterKnife;
 
 public class ComposeDialogFragment extends DialogFragment {
 
+    @BindView(R.id.tbTwitter) public Toolbar tbTwitter;
     @BindView(R.id.ivTweetImage)public ImageView ivTweetImage;
     @BindView(R.id.tvUserName) public TextView tvUserName;
+    @BindView(R.id.ivVerified)public ImageView ivVerfied;
+    @BindView(R.id.tvHandle) public TextView tvHandle;
     @BindView(R.id.tvBody) public TextView tvBody;
+    @BindView(R.id.ivMedia)public ImageView ivMedia;
+    @BindView(R.id.tvTimeStamp)public TextView tvTimeStamp;
+    @BindView(R.id.seperatorview_1)public View seperatorview_1;
+    @BindView(R.id.seperatorview_2)public View seperatorview_2;
+    @BindView(R.id.seperatorview_3)public View seperatorview_3;
+    @BindView(R.id.seperatorview_4)public View seperatorview_4;
+
+    @BindView(R.id.tvRetweetedNo) public TextView tvRetweetedNo;
+    @BindView(R.id.tvRetweeted) public TextView tvRetweeted;
+    @BindView(R.id.tvLikesNo) public TextView tvLikesNo;
+    @BindView(R.id.tvLikes) public TextView tvLikes;
+
+    @BindView(R.id.ivReply)public ImageView ivReply;
+    @BindView(R.id.ivRetweet)public ImageView ivRetweet;
+    @BindView(R.id.ivFavorite)public ImageView ivFavorite;
+
     @BindView(R.id.etReplyTweet) public EditText etReplyTweet;
     @BindView(R.id.tvCharsLeft) public TextView tvCharsLeft;
+    @BindView(R.id.rlReply) public RelativeLayout rlReply;
     @BindView(R.id.btTweetReply) public Button btTweetReply;
-    @BindView(R.id.tbTwitter) public Toolbar tbTwitter;
 
     Tweet tweet;
 
@@ -145,6 +168,55 @@ public class ComposeDialogFragment extends DialogFragment {
             }
             tvUserName.setText(tweet.getUser().getName());
             tvBody.setText(tweet.getText());
+
+            tvHandle.setText(tweet.getUser().getScreenName());
+            tvTimeStamp.setText(tweet.getCreatedAt());//TODO: Convert to time
+            ivMedia.setImageResource(0);
+            if(tweet.getEntities() != null && tweet.getEntities().getMedia()
+                    !=null ){
+                String mUrl = tweet.getEntities().getMedia().get(0).getMediaUrl();
+                Glide.with(getContext()).load(mUrl).placeholder(R.drawable.ic_launcher).
+                        error(R.drawable.ic_launcher).into(ivMedia);
+            }
+            etReplyTweet.setText("Reply to " + tweet.getUser().getName());
+            rlReply.setVisibility(View.GONE);
+
+            etReplyTweet.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    int maxLength = 42;
+                    int charsRemaining = maxLength - s.length();
+                    tvCharsLeft.setText(Integer.toString(charsRemaining));
+                    if(charsRemaining <0 ){
+                        tvCharsLeft.setEnabled(false);
+                        tvCharsLeft.setTextColor(Color.RED);
+                    }
+
+                }
+            });
+
+            etReplyTweet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                                      @Override
+                                                      public void onFocusChange(View v, boolean hasFocus) {
+                                                          if(hasFocus){
+                                                              rlReply.setVisibility(View.VISIBLE);
+                                                              etReplyTweet.setText("@" + tweet.getUser().getScreenName());
+                                                          }
+                                                      }
+                                                  }
+            );
+
+
 
 
         }

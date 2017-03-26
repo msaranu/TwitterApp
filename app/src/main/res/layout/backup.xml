@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <!--  <com.malmstein.fenster.view.FensterVideoView
+          android:id="@+id/ivMedia"
+          android:layout_width="wrap_content"
+          android:layout_below="@+id/tvBody"
+          android:layout_height="100dp"
+          android:layout_alignLeft="@id/tvBody"
+          android:layout_alignStart="@id/tvBody"
+          android:keepScreenOn="true"
+          android:fitsSystemWindows="true" />
+
+      <com.malmstein.fenster.controller.SimpleMediaFensterPlayerController
+          android:id="@+id/ivMedia"
+          android:layout_width="wrap_content"
+          android:layout_below="@+id/tvBody"
+          android:layout_height="100dp"
+          android:layout_alignLeft="@id/tvBody"
+          android:layout_alignStart="@id/tvBody"
+          android:layout_alignParentBottom="true"
+          android:animateLayoutChanges="true"
+          android:fitsSystemWindows="true" /> -->
+
+
+
+
+
+
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etReplyTweet"
+        android:layout_toRightOf="@+id/tvCharsLeft"
+        android:layout_toEndOf="@+id/tvCharsLeft"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="37dp"
+        android:id="@+id/btTweetReply" />
+
+
+</LinearLayout>
