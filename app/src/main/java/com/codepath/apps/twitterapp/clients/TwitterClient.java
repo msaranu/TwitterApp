@@ -71,7 +71,9 @@ public class TwitterClient extends OAuthBaseClient {
         String apiUrl = getApiUrl("statuses/update.json");
         RequestParams params = new RequestParams();
         params.put("status", statusText);
-        params.put("in_reply_to_status_id",inReplyStatusID);
+        if(inReplyStatusID <0) {
+            params.put("in_reply_to_status_id", inReplyStatusID);
+        }
 
         client.post(apiUrl, params, handler);
 

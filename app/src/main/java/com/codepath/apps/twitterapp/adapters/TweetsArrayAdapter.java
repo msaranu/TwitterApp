@@ -50,7 +50,8 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     //Returns the view type of the item at position for the purposes of view recycling.
     @Override
     public int getItemViewType(int position) {
-        if (mTweets.get(position).getUser().getProfileImageUrl() == null){
+        if (mTweets.get(position).getUser() == null &&
+                mTweets.get(position).getUser().getProfileImageUrl() == null){
             return NO_IMAGE;
         } else
             return IMAGE;
@@ -115,7 +116,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void configureViewHolder(final ViewHolder vh, Tweet tweet) {
         ImageView ivImage = vh.ivTweetImage;
         ivImage.setImageResource(0);
-        if (tweet.getUser().getProfileImageUrl() !=null) {
+        if (tweet.getUser()!=null && tweet.getUser().getProfileImageUrl() !=null) {
             String url = tweet.getUser().getProfileImageUrl();
             Glide.with(mContext).load(url).placeholder(R.drawable.ic_launcher).
                     error(R.drawable.ic_launcher).into(ivImage);
@@ -149,7 +150,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void configureViewHolderNoImage(ViewHolderNoImage vhImage, Tweet tweet) {
-        vhImage.tvUserName.setText(tweet.getUser().getScreenName());
+            vhImage.tvUserName.setText(tweet.getUser().getName());
         vhImage.tvBody.setText(tweet.getText());
     }
 
@@ -299,6 +300,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         public TextView tvBody;
         @BindView(R.id.tvUserName)
         public TextView tvUserName;
+
 
         public ViewHolderNoImage(View itemView) {
             super(itemView);

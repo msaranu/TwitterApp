@@ -1,7 +1,10 @@
 package com.codepath.apps.twitterapp.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,8 +24,10 @@ import com.codepath.apps.twitterapp.applications.TwitterApplication;
 import com.codepath.apps.twitterapp.clients.TwitterClient;
 import com.codepath.apps.twitterapp.decorators.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.twitterapp.decorators.ItemClickSupport;
-import com.codepath.apps.twitterapp.fragments.ComposeDialogFragment;
+import com.codepath.apps.twitterapp.fragments.ComposeTweetDialogFragment;
+import com.codepath.apps.twitterapp.fragments.TweetDetailDialogFragment;
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.models.User;
 import com.codepath.apps.twitterapp.network.NetworkUtil;
 import com.codepath.apps.twitterapp.services.TweetOfflineService;
 import com.google.gson.FieldNamingPolicy;
@@ -42,7 +47,7 @@ import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 
-public class TimelineActivity extends AppCompatActivity implements ComposeDialogFragment.ComposeTweetDialogListener{
+public class TimelineActivity extends AppCompatActivity implements TweetDetailDialogFragment.ComposeTweetDialogListener{
     private TwitterClient client;
 
     public TimelineActivity(){}
@@ -54,6 +59,8 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
     private EndlessRecyclerViewScrollListener scrollListener;
     private SwipeRefreshLayout swipeContainer;
     TweetOfflineService tweetofflineservice;
+    @BindView(R.id.fabComposeTweet) FloatingActionButton fabComposeTweet;
+    Tweet composeTweet;
 
 
     @Override
@@ -65,9 +72,52 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         setSupportActionBar(tbTwitter);
         client = TwitterApplication.getRestClient();
         bindDataToAdapter(this);
+
+        // Get intent, action and MIME type
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+
+                // Make sure to check whether returned data will be null.
+                String titleOfPage = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                String urlOfPage = intent.getStringExtra(Intent.EXTRA_TEXT);
+                Uri imageUriOfPage = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+
+                if(intent != null){
+                    Tweet t = new Tweet();
+                    t.setText(titleOfPage);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("TWEET_OBJ", t);
+                    onComposeTweet(bundle);
+                }
+            }
+        }
+
+
+        setFloatingAction();
         setRecyleViewLayout();
         setSwipeRefreshLayout();
 
+
+
+
+
+    }
+
+    private void setFloatingAction() {
+
+        fabComposeTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("TWEET_OBJ", new Tweet());
+                onComposeTweet(bundle);
+
+            }
+        });
     }
 
     private void setSwipeRefreshLayout() {
@@ -165,7 +215,7 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("TWEET_OBJ", tweets.get(position));
-                onComposeTweet(bundle);
+                onReplyTweet(bundle);
             }
         });
 
@@ -242,21 +292,58 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
 
     public void onComposeTweet(Bundle bundle){
         FragmentManager fm = getSupportFragmentManager();
-        ComposeDialogFragment fdf =  ComposeDialogFragment.newInstance();
+        ComposeTweetDialogFragment fdf =  ComposeTweetDialogFragment.newInstance();
          fdf.setArguments(bundle);
+        fdf.setStyle( DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme );
+        fdf.show(fm, "FRAGMENT_MODAL_COMPOSE");
+    }
+
+
+    public void onReplyTweet(Bundle bundle){
+        FragmentManager fm = getSupportFragmentManager();
+        TweetDetailDialogFragment fdf =  TweetDetailDialogFragment.newInstance();
+        fdf.setArguments(bundle);
         fdf.setStyle( DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme );
         fdf.show(fm, "FRAGMENT_MODAL_COMPOSE");
     }
 
     @Override
     public void onFinishComposeTweetDialog(String tweetText, Tweet tweet) {
+        tweet.setText(tweetText);
+        composeTweet = tweet;
 
         client.postStatusUpdate(new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());
+                if(composeTweet.getId() <= 0) {
+                    User u = new User();
+                    u.setScreenName("malleswari_s");
+                    u.setName("Malleswari Saranu");
+                    u.setProfileImageUrl("http://abs.twimg.com/sticky/default_profile_images/default_profile_5_normal.png");
+                    u.setVerified(false);
+                    composeTweet.setUser(u);
+                    tweets.add(0, composeTweet);
+                    adapter.notifyDataSetChanged();
+                    rvTweets.scrollToPosition(0);
+                    swipeContainer.setRefreshing(false);
+                }
+
 
             }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d("DEBUG", response.toString());
+                if(composeTweet.getId() <= 0) {
+                    tweets.add(0, composeTweet);
+                    adapter.notifyDataSetChanged();
+                    rvTweets.scrollToPosition(0);
+                }
+
+
+            }
+
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
@@ -281,6 +368,5 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
         }, tweetText, tweet.getId());
 
     }
-
 
 }

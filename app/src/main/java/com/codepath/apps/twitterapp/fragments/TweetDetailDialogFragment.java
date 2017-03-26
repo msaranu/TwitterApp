@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class ComposeDialogFragment extends DialogFragment {
+public class TweetDetailDialogFragment extends DialogFragment {
 
     @BindView(R.id.tbTwitter) public Toolbar tbTwitter;
     @BindView(R.id.ivTweetImage)public ImageView ivTweetImage;
@@ -64,7 +64,7 @@ public class ComposeDialogFragment extends DialogFragment {
     Tweet tweet;
 
 
-    public ComposeDialogFragment() {
+    public TweetDetailDialogFragment() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
@@ -74,8 +74,8 @@ public class ComposeDialogFragment extends DialogFragment {
            void onFinishComposeTweetDialog(String tweetText, Tweet tweet);
     }
 
-    public static ComposeDialogFragment newInstance() {
-        ComposeDialogFragment frag = new ComposeDialogFragment();
+    public static TweetDetailDialogFragment newInstance() {
+        TweetDetailDialogFragment frag = new TweetDetailDialogFragment();
         Bundle args = new Bundle();
         return frag;
     }
@@ -98,7 +98,7 @@ public class ComposeDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
    //     getDialog().setTitle("Filter Settings");
-        View fView = inflater.inflate(R.layout.fragment_compose_tweet, container);
+        View fView = inflater.inflate(R.layout.fragment_tweet_detail, container);
         Bundle bundle = this.getArguments();
         ButterKnife.bind(this,fView);
         populateViewsfromObject(bundle);
