@@ -110,11 +110,11 @@ public class User extends BaseModel implements Parcelable{
     }
 
     public String getScreenName() {
-        return screenName;
+        return "@" + screenName;
     }
 
     public void setScreenName(String screenName) {
-        this.screenName = "@" + screenName;
+        this.screenName =  screenName;
     }
 
 

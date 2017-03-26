@@ -71,7 +71,7 @@ public class ComposeDialogFragment extends DialogFragment {
     }
 
     public interface ComposeTweetDialogListener {
-           void onFinishComposeTweetDialog(Tweet tweet);
+           void onFinishComposeTweetDialog(String tweetText, Tweet tweet);
     }
 
     public static ComposeDialogFragment newInstance() {
@@ -150,7 +150,13 @@ public class ComposeDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            //    populateObjectfromViews();
+        super.onViewCreated(view, savedInstanceState);
+        btTweetReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populateObjectfromViews();
+            }
+        });
 
     }
 
@@ -194,7 +200,7 @@ public class ComposeDialogFragment extends DialogFragment {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    int maxLength = 42;
+                    int maxLength = 142;
                     int charsRemaining = maxLength - s.length();
                     tvCharsLeft.setText(Integer.toString(charsRemaining));
                     if(charsRemaining <0 ){
@@ -210,7 +216,11 @@ public class ComposeDialogFragment extends DialogFragment {
                                                       public void onFocusChange(View v, boolean hasFocus) {
                                                           if(hasFocus){
                                                               rlReply.setVisibility(View.VISIBLE);
-                                                              etReplyTweet.setText("@" + tweet.getUser().getScreenName());
+                                                              etReplyTweet.setTextColor(Color.BLACK);
+                                                              etReplyTweet.setTextSize(14);
+                                                              etReplyTweet.setText(tweet.getUser().getScreenName());
+                                                              etReplyTweet.setSelection(etReplyTweet.getText().length());
+
                                                           }
                                                       }
                                                   }
@@ -225,7 +235,9 @@ public class ComposeDialogFragment extends DialogFragment {
 
 
     private void populateObjectfromViews() {
-
+        ComposeTweetDialogListener listener = (ComposeTweetDialogListener) getActivity();
+        listener.onFinishComposeTweetDialog(etReplyTweet.getText().toString(), tweet);
+        dismiss();
 
         }
     }

@@ -53,21 +53,27 @@ public class TwitterClient extends OAuthBaseClient {
 
 	}
 
+
+    //Select and set the favorite heart icon.
+    public void setFavoriteIcon(AsyncHttpResponseHandler handler, long id){
+        String apiUrl = getApiUrl("favorites/create.json");
+        RequestParams params = new RequestParams();
+            params.put("id", id);
+
+        client.post(apiUrl, params, handler);
+
+    }
+
     // POST https://api.twitter.com/1.1/statuses/update.json?
     // status=Maybe%20he%27ll%20finally%20find%20his%20keys.%20%23peterfalk
 
-    public void postStatusUpdate(AsyncHttpResponseHandler handler, String statusText, long inReplyStatusId, String[] mediaIds){
-        String apiUrl = getApiUrl("statuses/home_timeline.json");
+    public void postStatusUpdate(AsyncHttpResponseHandler handler, String statusText, long inReplyStatusID){
+        String apiUrl = getApiUrl("statuses/update.json");
         RequestParams params = new RequestParams();
         params.put("status", statusText);
-        if(mediaIds != null){
-            params.put("media_ids", mediaIds);
-        }
-        if(inReplyStatusId != 0){
-            params.put("status", statusText);
-        }
+        params.put("in_reply_to_status_id",inReplyStatusID);
 
-        client.get(apiUrl, params, handler);
+        client.post(apiUrl, params, handler);
 
     }
 

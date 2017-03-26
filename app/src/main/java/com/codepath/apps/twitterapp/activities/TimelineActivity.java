@@ -249,9 +249,37 @@ public class TimelineActivity extends AppCompatActivity implements ComposeDialog
     }
 
     @Override
-    public void onFinishComposeTweetDialog(Tweet tweet) {
-      //  fragFilterSettings = fs;
-       // getArticles(FIRST_PAGE);
+    public void onFinishComposeTweetDialog(String tweetText, Tweet tweet) {
+
+        client.postStatusUpdate(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d("DEBUG", response.toString());
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                if(errorResponse.toString().contains("Too Many Requests")||errorResponse.toString().contains("Rate limit exceeded")) {
+                    Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS THIS SESSION",
+                            Toast.LENGTH_LONG).show();
+                }else  Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS 2 ??",
+                        Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                if(errorResponse.toString().contains("Too Many Requests")) {
+                    Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS THIS SESSION",
+                            Toast.LENGTH_LONG).show();
+                }else  Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS 3??",
+                        Toast.LENGTH_LONG).show();
+
+            }
+
+        }, tweetText, tweet.getId());
+
     }
 
 
