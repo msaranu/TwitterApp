@@ -70,7 +70,9 @@
         app:layout_anchor="@id/rvTweets"
         app:borderWidth="0dp"
         app:elevation="6dp"
-        app:layout_anchorGravity="bottom|right|end"
+        app:layout_anchorGravity="bottom|right"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp"
         android:src="@drawable/compose_new"
         app:backgroundTint="@color/blue"
         android:clickable="true"/>

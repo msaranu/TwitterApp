@@ -90,7 +90,7 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
                     public boolean onMenuItemClick(MenuItem item) {
                         if(item.getItemId() == R.id.action_close){
                            // getDialog().dismiss();
-                            if(etReplyTweet.getText() !=null) {
+                            if(!etReplyTweet.getText().toString().isEmpty() ) {
                                 FragmentManager fm = getFragmentManager();
                                 MyAlertDialogFragment fdf = MyAlertDialogFragment.newInstance();
                                 fdf.setTargetFragment(ComposeTweetDialogFragment.this, 300);
