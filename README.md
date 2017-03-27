@@ -51,7 +51,8 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src="http://i.imgur.com/PwMyheZ.gif" title='Twitter' />
+
+<img src="http://i.imgur.com/PwMyheZ.gif" title=Twitter />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
