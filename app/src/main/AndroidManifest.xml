@@ -43,6 +43,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.LogoPageActivity">
+            </activity>
+        <activity
             android:name=".activities.TimelineActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>

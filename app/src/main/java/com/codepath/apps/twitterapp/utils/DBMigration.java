@@ -1,4 +1,4 @@
-package com.codepath.apps.twitterapp;
+package com.codepath.apps.twitterapp.utils;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

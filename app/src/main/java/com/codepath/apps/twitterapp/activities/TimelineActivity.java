@@ -47,19 +47,22 @@ import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 
-public class TimelineActivity extends AppCompatActivity implements TweetDetailDialogFragment.ComposeTweetDialogListener{
+public class TimelineActivity extends AppCompatActivity implements TweetDetailDialogFragment.ComposeTweetDialogListener {
     private TwitterClient client;
 
-    public TimelineActivity(){}
+    public TimelineActivity() {
+    }
 
     ArrayList<Tweet> tweets;
     TweetsArrayAdapter adapter;
-    @BindView(R.id.rvTweets) RecyclerView rvTweets;
-    public static final int FIRST_PAGE=0;
+    @BindView(R.id.rvTweets)
+    RecyclerView rvTweets;
+    public static final int FIRST_PAGE = 0;
     private EndlessRecyclerViewScrollListener scrollListener;
     private SwipeRefreshLayout swipeContainer;
     TweetOfflineService tweetofflineservice;
-    @BindView(R.id.fabComposeTweet) FloatingActionButton fabComposeTweet;
+    @BindView(R.id.fabComposeTweet)
+    FloatingActionButton fabComposeTweet;
     Tweet composeTweet;
 
 
@@ -85,10 +88,10 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
                 String titleOfPage = intent.getStringExtra(Intent.EXTRA_SUBJECT);
                 String urlOfPage = intent.getStringExtra(Intent.EXTRA_TEXT);
                 Uri imageUriOfPage = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
-
-                if(intent != null){
+                String intentSring = "Title: " + titleOfPage + "\r\n" + "URL: " + urlOfPage ;
+                if (intent != null) {
                     Tweet t = new Tweet();
-                    t.setText(titleOfPage);
+                    t.setText(intentSring);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("TWEET_OBJ", t);
                     onComposeTweet(bundle);
@@ -100,9 +103,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
         setFloatingAction();
         setRecyleViewLayout();
         setSwipeRefreshLayout();
-
-
-
 
 
     }
@@ -142,60 +142,61 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
     }
 
     private void populateTimeline(int page) {
-        long id=0;
+        long id = 0;
         boolean scroll = false; //set it later
         if (page != 0) {
             id = tweets.get(tweets.size() - 1).getId() - 1;
-            scroll=true;
+            scroll = true;
         }
-            client.getHomeTimeline(new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    Log.d("DEBUG", response.toString());
-                    GsonBuilder gsonBuilder = new GsonBuilder();
-                    gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-                    // register type adapters here, specify field naming policy, etc.
-                    Gson gson = gsonBuilder.create();              //  Tweet[] tarray = gson.fromJson(response.toString(),Tweet[].class);
-                    List<Tweet> tweetList = gson.fromJson(response.toString(), new TypeToken<List<Tweet>>() {
-                    }.getType());
-                    if (tweetList == null || tweetList.isEmpty() || tweetList.size() == 0) {
-                        Toast.makeText(TimelineActivity.this, "NO TWEETS",
-                                Toast.LENGTH_LONG).show();
-                    } else {
-                        tweetofflineservice.deleteTweetsoffline();
-                        tweetofflineservice.saveTweetsOffline(tweetList);
-                        tweets.addAll(tweetList);
-                        adapter.notifyDataSetChanged();
-                        swipeContainer.setRefreshing(false);
-
-                    }
-                }
-
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    Log.d("DEBUG", errorResponse.toString());
-                    if(errorResponse.toString().contains("Too Many Requests")||errorResponse.toString().contains("Rate limit exceeded")) {
-                        Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS THIS SESSION",
-                                Toast.LENGTH_LONG).show();
-                    }else  Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS ??",
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d("DEBUG", response.toString());
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
+                // register type adapters here, specify field naming policy, etc.
+                Gson gson = gsonBuilder.create();              //  Tweet[] tarray = gson.fromJson(response.toString(),Tweet[].class);
+                List<Tweet> tweetList = gson.fromJson(response.toString(), new TypeToken<List<Tweet>>() {
+                }.getType());
+                if (tweetList == null || tweetList.isEmpty() || tweetList.size() == 0) {
+                    Toast.makeText(TimelineActivity.this, "NO TWEETS",
                             Toast.LENGTH_LONG).show();
+                } else {
+                    tweetofflineservice.deleteTweetsoffline();
+                    tweetofflineservice.saveTweetsOffline(tweetList);
+                    tweets.addAll(tweetList);
+                    adapter.notifyDataSetChanged();
+                    swipeContainer.setRefreshing(false);
+
                 }
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.d("DEBUG", errorResponse.toString());
-                    if(errorResponse.toString().contains("Too Many Requests")) {
-                        Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS THIS SESSION",
-                                Toast.LENGTH_LONG).show();
-                    }else  Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS ??",
+            }
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
+                    Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
+                } else Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS ??",
+                        Toast.LENGTH_LONG).show();
+            }
 
-                }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                if (errorResponse.toString().contains("Too Many Requests")) {
+                    Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS THIS SESSION",
+                            Toast.LENGTH_LONG).show();
+                } else Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS ??",
+                        Toast.LENGTH_LONG).show();
 
-            }, id, scroll);
+            }
+
+        }, id, scroll);
 
 
-        }
+    }
 
     private void setRecyleViewLayout() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -222,7 +223,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
     }
 
     private void bindDataToAdapter(TimelineActivity timelineActivity) {
-       // fragFilterSettings = new FilterSettings();
+        // fragFilterSettings = new FilterSettings();
         // Create adapter passing in the sample user data
         tweets = new ArrayList<>();
         adapter = new TweetsArrayAdapter(this, tweets);
@@ -263,7 +264,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
             handler.post(r);
             Toast.makeText(TimelineActivity.this, "Retreiving Tweets Offline from: ",
                     Toast.LENGTH_LONG).show();
-       //     swipeContainer.setRefreshing(false);
+            //     swipeContainer.setRefreshing(false);
 
             return;
         }
@@ -274,7 +275,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_twitter, menu);
-       // MenuItem searchItem = menu.findItem(R.id.action_compose);
+        // MenuItem searchItem = menu.findItem(R.id.action_compose);
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -290,52 +291,48 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
         return super.onOptionsItemSelected(item);
     }
 
-    public void onComposeTweet(Bundle bundle){
+    public void onComposeTweet(Bundle bundle) {
         FragmentManager fm = getSupportFragmentManager();
-        ComposeTweetDialogFragment fdf =  ComposeTweetDialogFragment.newInstance();
-         fdf.setArguments(bundle);
-        fdf.setStyle( DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme );
-        fdf.show(fm, "FRAGMENT_MODAL_COMPOSE");
-    }
-
-
-    public void onReplyTweet(Bundle bundle){
-        FragmentManager fm = getSupportFragmentManager();
-        TweetDetailDialogFragment fdf =  TweetDetailDialogFragment.newInstance();
+        ComposeTweetDialogFragment fdf = ComposeTweetDialogFragment.newInstance();
         fdf.setArguments(bundle);
-        fdf.setStyle( DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme );
+        fdf.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme);
         fdf.show(fm, "FRAGMENT_MODAL_COMPOSE");
     }
+
+
+    public void onReplyTweet(Bundle bundle) {
+        FragmentManager fm = getSupportFragmentManager();
+        TweetDetailDialogFragment fdf = TweetDetailDialogFragment.newInstance();
+        fdf.setArguments(bundle);
+        fdf.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme);
+        fdf.show(fm, "FRAGMENT_MODAL_COMPOSE");
+    }
+
 
     @Override
     public void onFinishComposeTweetDialog(String tweetText, Tweet tweet) {
-        tweet.setText(tweetText);
-        composeTweet = tweet;
+        composeTweet = constructOfflineTweetUser();
+        composeTweet.setText(tweetText);
+
 
         client.postStatusUpdate(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());
-                if(composeTweet.getId() <= 0) {
-                    User u = new User();
-                    u.setScreenName("malleswari_s");
-                    u.setName("Malleswari Saranu");
-                    u.setProfileImageUrl("http://abs.twimg.com/sticky/default_profile_images/default_profile_5_normal.png");
-                    u.setVerified(false);
-                    composeTweet.setUser(u);
+                if (composeTweet.getId() <= 0) {
+
                     tweets.add(0, composeTweet);
                     adapter.notifyDataSetChanged();
                     rvTweets.scrollToPosition(0);
                     swipeContainer.setRefreshing(false);
                 }
 
-
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 Log.d("DEBUG", response.toString());
-                if(composeTweet.getId() <= 0) {
+                if (composeTweet.getId() <= 0) {
                     tweets.add(0, composeTweet);
                     adapter.notifyDataSetChanged();
                     rvTweets.scrollToPosition(0);
@@ -348,25 +345,39 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
-                if(errorResponse.toString().contains("Too Many Requests")||errorResponse.toString().contains("Rate limit exceeded")) {
+                if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                     Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
-                }else  Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS 2 ??",
+                } else Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS 2 ??",
                         Toast.LENGTH_LONG).show();
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
-                if(errorResponse.toString().contains("Too Many Requests")) {
+                if (errorResponse.toString().contains("Too Many Requests")) {
                     Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
-                }else  Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS 3??",
+                } else Toast.makeText(TimelineActivity.this, "TOO MANY REQUESTS 3??",
                         Toast.LENGTH_LONG).show();
 
             }
 
         }, tweetText, tweet.getId());
 
+    }
+
+    public  Tweet constructOfflineTweetUser() {
+        Tweet tweetOffline = new Tweet();
+        tweetOffline.setRetweetCount(0l);
+        tweetOffline.setFavoriteCount(0l);
+        User u = new User();
+        u.setScreenName("malleswari_s");
+        u.setName("Malleswari Saranu");
+        u.setProfileImageUrl("http://abs.twimg.com/sticky/default_profile_images/default_profile_5_normal.png");
+        u.setVerified(false);
+        tweetOffline.setUser(u);
+        return tweetOffline;
     }
 
 }

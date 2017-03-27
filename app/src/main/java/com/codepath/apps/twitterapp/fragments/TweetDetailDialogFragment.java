@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterapp.R;
+import com.codepath.apps.twitterapp.activities.TimelineActivity;
 import com.codepath.apps.twitterapp.models.Tweet;
 
 import butterknife.BindView;
@@ -50,7 +51,7 @@ public class TweetDetailDialogFragment extends DialogFragment {
     @BindView(R.id.tvRetweetedNo) public TextView tvRetweetedNo;
     @BindView(R.id.tvRetweeted) public TextView tvRetweeted;
     @BindView(R.id.tvLikesNo) public TextView tvLikesNo;
-    @BindView(R.id.tvLikes) public TextView tvLikes;
+    @BindView(R.id.tvFavorited) public TextView tvFavorited;
 
     @BindView(R.id.ivReply)public ImageView ivReply;
     @BindView(R.id.ivRetweet)public ImageView ivRetweet;
@@ -60,6 +61,14 @@ public class TweetDetailDialogFragment extends DialogFragment {
     @BindView(R.id.tvCharsLeft) public TextView tvCharsLeft;
     @BindView(R.id.rlReply) public RelativeLayout rlReply;
     @BindView(R.id.btTweetReply) public Button btTweetReply;
+
+    @BindView(R.id.rlTweetResponse) public RelativeLayout rlTweetResponse;
+    @BindView(R.id.ivResponseTweetImage)public ImageView ivResponseTweetImage;
+    @BindView(R.id.tvResponseUserName) public TextView tvResponseUserName;
+    @BindView(R.id.ivResponseVerified)public ImageView ivResponseVerified;
+    @BindView(R.id.tvResponseHandle) public TextView tvResponseHandle;
+    @BindView(R.id.tvResponseBody) public TextView tvResponseBody;
+
 
     Tweet tweet;
 
@@ -186,6 +195,7 @@ public class TweetDetailDialogFragment extends DialogFragment {
             }
             etReplyTweet.setText("Reply to " + tweet.getUser().getName());
             rlReply.setVisibility(View.GONE);
+            rlTweetResponse.setVisibility(View.GONE);
 
             etReplyTweet.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -227,6 +237,29 @@ public class TweetDetailDialogFragment extends DialogFragment {
             );
 
 
+            tvRetweeted.setText(Long.toString(tweet.getRetweetCount()));
+            tvFavorited.setText(Long.toString(tweet.getFavoriteCount()));
+
+
+            ivFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    ivFavorite.setImageResource(R.drawable.red_heart);
+                    long lv = Long.parseLong(tvFavorited.getText().toString());
+                    tvFavorited.setText(Long.toString(lv+1l));
+                }
+            });
+
+
+            ivRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ivRetweet.setImageResource(R.drawable.twitter_retweet_green);
+                    long lv = Long.parseLong(tvRetweeted.getText().toString());
+                    tvRetweeted.setText(Long.toString(lv+1l));
+                }
+            });
 
 
         }
@@ -235,9 +268,29 @@ public class TweetDetailDialogFragment extends DialogFragment {
 
 
     private void populateObjectfromViews() {
+        Tweet responseTweet = new TimelineActivity().constructOfflineTweetUser();
+        rlTweetResponse.setVisibility(View.VISIBLE);
+        rlReply.setVisibility(View.GONE);
+       // etReplyTweet.setFocusable(false);
+
+
+
+  /*      @BindView(R.id.rlTweetResponse) public RelativeLayout rlTweetResponse;
+        @BindView(R.id.ivResponseTweetImage)public ImageView ivResponseTweetImage;
+        @BindView(R.id.tvResponseUserName) public TextView tvResponseUserName;
+        @BindView(R.id.ivResponseVerified)public ImageView ivResponseVerified;
+        @BindView(R.id.tvResponseHandle) public TextView tvResponseHandle;
+        @BindView(R.id.tvResponseBody) public TextView tvResponseBody;*/
+
+        Glide.with(getContext()).load(responseTweet.getUser().getProfileImageUrl()).placeholder(R.drawable.ic_launcher).
+                error(R.drawable.ic_launcher).into(ivResponseTweetImage);
+        tvResponseUserName.setText(responseTweet.getUser().getName());
+        tvResponseHandle.setText(responseTweet.getUser().getScreenName());
+        tvResponseBody.setText(etReplyTweet.getText().toString());
+
         ComposeTweetDialogListener listener = (ComposeTweetDialogListener) getActivity();
         listener.onFinishComposeTweetDialog(etReplyTweet.getText().toString(), tweet);
-        dismiss();
+      //  dismiss();
 
         }
     }

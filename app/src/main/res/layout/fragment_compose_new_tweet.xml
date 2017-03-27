@@ -13,6 +13,18 @@
         android:layout_height="wrap_content"
         app:titleTextColor="@android:color/white"
         android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:srcCompat="@drawable/twitter_egg"
+                android:background="@drawable/rounded_corners"
+                android:id="@+id/ivTweetImage" />
+
+        </LinearLayout>
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
@@ -62,7 +74,7 @@
         android:visibility="visible">
 
         <TextView
-            android:text="100"
+            android:text="142"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/btTweetReply"
@@ -71,7 +83,7 @@
             android:id="@+id/tvCharsLeft" />
 
         <Button
-            android:text="Reply"
+            android:text="Tweet"
             android:textAllCaps="false"
             android:layout_width="50dp"
             android:layout_height="25dp"

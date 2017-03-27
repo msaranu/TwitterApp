@@ -159,11 +159,15 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
         if (bundle != null ) {
             tweet = bundle.getParcelable("TWEET_OBJ");
 
-            List draftListfromDB = TweetOfflineService.retrieveTweetDraft();
-            if(draftListfromDB!=null && draftListfromDB.size() !=0) {
-                String draftString = ((Draft)(draftListfromDB.get(0))).getDraftText().toString();
-                etReplyTweet.setText(draftString);
-                etReplyTweet.setSelection(draftString.length()+1);
+            if(tweet.getText()==null) {
+                List draftListfromDB = TweetOfflineService.retrieveTweetDraft();
+                if (draftListfromDB != null && draftListfromDB.size() != 0) {
+                    String draftString = ((Draft) (draftListfromDB.get(0))).getDraftText().toString();
+                    etReplyTweet.setText(draftString);
+                    etReplyTweet.setSelection(draftString.length());
+                }
+            } else {
+                etReplyTweet.setText(tweet.getText());
             }
 
             etReplyTweet.addTextChangedListener(new TextWatcher() {

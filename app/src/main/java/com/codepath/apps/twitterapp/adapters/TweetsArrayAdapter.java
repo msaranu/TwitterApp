@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterapp.R;
 import com.codepath.apps.twitterapp.models.Tweet;
+import com.codepath.apps.twitterapp.utils.DateUtil;
 
 import java.util.List;
 
@@ -114,18 +115,18 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void configureViewHolder(final ViewHolder vh, Tweet tweet) {
-        ImageView ivImage = vh.ivTweetImage;
+        final ImageView ivImage = vh.ivTweetImage;
         ivImage.setImageResource(0);
         if (tweet.getUser()!=null && tweet.getUser().getProfileImageUrl() !=null) {
             String url = tweet.getUser().getProfileImageUrl();
-            Glide.with(mContext).load(url).placeholder(R.drawable.ic_launcher).
+            Glide.with(mContext).load(url).placeholder(R.drawable.placeholder).
                     error(R.drawable.ic_launcher).into(ivImage);
         }
           vh.tvUserName.setText(tweet.getUser().getName());
           vh.tvBody.setText(tweet.getText());
         vh.tvHandle.setText(tweet.getUser().getScreenName());
-        vh.tvTime.setText("1hr");//TODO: Convert to time
-        ImageView ivMedia = vh.ivMedia;
+        vh.tvTime.setText(DateUtil.getRelativeTimeAgo(tweet.getCreatedAt()));//TODO: Convert to time
+        final ImageView ivMedia = vh.ivMedia;
         ivMedia.setImageResource(0);
         if(tweet.getEntities() != null && tweet.getEntities().getMedia()
                 !=null ){
@@ -145,6 +146,35 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
              //   vh.textureView.start();
             }
         }
+
+if( tweet.getRetweetCount() !=0 && tweet.getFavoriteCount() !=0){
+
+    vh.tvRetweeted.setText(Long.toString(tweet.getRetweetCount()));
+    vh.tvFavorited.setText(Long.toString(tweet.getFavoriteCount()));
+}else{
+    vh.tvRetweeted.setText("0");
+    vh.tvFavorited.setText("0");
+}
+
+        vh.ivFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                vh.ivFavorite.setImageResource(R.drawable.red_heart);
+                long lv = Long.parseLong(vh.tvFavorited.getText().toString());
+                vh.tvFavorited.setText(Long.toString(lv+1l));
+            }
+        });
+
+
+        vh.ivRetweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vh.ivRetweet.setImageResource(R.drawable.twitter_retweet_green);
+                long lv = Long.parseLong(vh.tvRetweeted.getText().toString());
+                vh.tvRetweeted.setText(Long.toString(lv+1l));
+            }
+        });
 
 
     }
