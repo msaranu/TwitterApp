@@ -6,13 +6,13 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/seperator_height"
         android:background="@android:color/darker_gray"
         android:id="@+id/view_toolbar" />
 
     <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/profile_image_dimen"
+        android:layout_height="@dimen/profile_image_dimen"
         android:layout_marginRight="10dp"
         android:layout_marginTop="12dp"
         app:srcCompat="@drawable/ic_launcher"
@@ -30,8 +30,8 @@
         android:layout_alignTop="@id/ivTweetImage"/>
 
     <ImageView
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="@dimen/profile_image_dimen"
+        android:layout_height="@dimen/profile_image_dimen"
         app:srcCompat="@drawable/twitterverified"
         android:id="@+id/ivVerified"
         android:layout_marginTop="2dp"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvHandle"
-        android:textSize="12sp"
+        android:textSize="@dimen/handle_text"
         android:layout_toRightOf="@+id/ivVerified"
         android:layout_toEndOf="@+id/ivVerified"
         android:layout_alignTop="@id/ivTweetImage"
@@ -64,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvTime"
-        android:textSize="12sp"
+        android:textSize="@dimen/handle_text"
         android:layout_toRightOf="@+id/tvDot"
         android:layout_toEndOf="@+id/tvDot"
         android:layout_alignBottom="@id/tvHandle"
@@ -86,7 +86,7 @@
          />
 
     <ImageView
-        android:layout_width="290dp"
+        android:layout_width="@dimen/tweet_image_dimen"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
@@ -120,8 +120,8 @@
 
 
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/tiny_images_dimen"
+        android:layout_height="@dimen/tiny_images_dimen"
         android:layout_below="@+id/ivMedia"
         android:layout_alignLeft="@id/ivMedia"
         android:layout_alignStart="@id/ivMedia"
@@ -131,8 +131,8 @@
         android:id="@+id/ivReply" />
 
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/tiny_images_dimen"
+        android:layout_height="@dimen/tiny_images_dimen"
         android:layout_below="@id/ivMedia"
         android:layout_toRightOf="@id/ivReply"
         android:layout_toEndOf="@id/ivReply"
@@ -154,8 +154,8 @@
 
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/tiny_images_dimen"
+        android:layout_height="@dimen/tiny_images_dimen"
         android:layout_below="@id/ivMedia"
         android:layout_toRightOf="@id/tvRetweeted"
         android:layout_toEndOf="@id/tvRetweeted"
@@ -170,10 +170,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvFavorited"
         android:layout_below="@+id/ivMedia"
-        android:layout_marginBottom="10dp"
         android:layout_toRightOf="@+id/ivFavorite"
         android:layout_marginRight="25dp"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_toEndOf="@+id/ivFavorite"
       />
 

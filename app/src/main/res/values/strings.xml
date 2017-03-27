@@ -6,5 +6,12 @@
     <string name="title_activity_timeline">Home Timeline</string>
     <string name="connect_to_twitter">Connect to x`<x></x>Twitter</string>
     <string name="title_activity_timeline2">TimelineActivity2</string>
+    <string name="delete_button">Delete</string>
+    <string name="save_button">Save draft</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="max_text_length">142</string>
+    <string name="retweet_label">RETWEETS</string>
+    <string name="retweet_like">LIKES</string>
+
 
 </resources>

@@ -5,44 +5,44 @@
     android:layout_alignParentBottom="true">
 
     <Button
-        android:text="Delete"
+        android:text="@string/delete_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/red"
-        android:textSize="15dp"
+        android:textSize="@dimen/text_size_alert"
         android:textAllCaps="false"
         android:id="@+id/btnDelete" />
 
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/seperator_height"
         android:layout_below="@id/btnDelete"
         android:background="@android:color/darker_gray"
         android:id="@+id/seperatorview" />
 
     <Button
-        android:text="Save draft"
+        android:text="@string/save_button"
         android:layout_width="match_parent"
         android:layout_below="@id/seperatorview"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
+        android:textSize="@dimen/text_size_alert"
         android:textAllCaps="false"
         android:id="@+id/btnSaveDraft" />
 
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/seperator_height"
         android:layout_below="@id/btnSaveDraft"
         android:background="@android:color/darker_gray"
         android:id="@+id/seperatorview2" />
 
 
     <Button
-        android:text="Cancel"
+        android:text="@string/cancel_button"
         android:layout_width="match_parent"
-        android:textSize="15dp"
+        android:textSize="@dimen/text_size_alert"
         android:layout_height="wrap_content"
         android:layout_below="@id/seperatorview2"
         android:textAllCaps="false"
