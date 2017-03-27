@@ -248,7 +248,9 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
 
     private void callTwitterAPI(int page) {
 
-        boolean offline = false;
+        //to test offline DB capture without bringing down internet connection everytime
+        boolean offline = true;
+
         if (!offline && NetworkUtil.isInternetAvailable(getApplicationContext()) && NetworkUtil.isOnline()) {
             populateTimeline(page);
         } else {
@@ -264,7 +266,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
             };
 
             handler.post(r);
-            Toast.makeText(TimelineActivity.this, "Retreiving Tweets Offline from: ",
+            Toast.makeText(TimelineActivity.this, "Retreiving Tweets Offline",
                     Toast.LENGTH_LONG).show();
             //     swipeContainer.setRefreshing(false);
 
@@ -285,11 +287,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == 10) {
-            Bundle bundle = new Bundle();
-            onComposeTweet(bundle);
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
