@@ -14,7 +14,7 @@ import java.util.List;
 
 public class Entities implements Parcelable {
 
-      private List<Media> media = null;
+    private List<Media> media = null;
 
     protected Entities(Parcel in) {
     }

@@ -46,6 +46,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
+import static com.codepath.apps.twitterapp.properties.properties.OFFLINE_PROFILE_URL;
+import static com.codepath.apps.twitterapp.properties.properties.OFFLINE_SCREEN_NAME;
+import static com.codepath.apps.twitterapp.properties.properties.OFFLINE__NAME;
+
 
 public class TimelineActivity extends AppCompatActivity implements TweetDetailDialogFragment.ComposeTweetDialogListener {
     private TwitterClient client;
@@ -75,7 +79,15 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
         setSupportActionBar(tbTwitter);
         client = TwitterApplication.getRestClient();
         bindDataToAdapter(this);
+        bindChromeIntenttoAdapter();
+        setFloatingAction();
+        setRecyleViewLayout();
+        setSwipeRefreshLayout();
 
+
+    }
+
+    private void bindChromeIntenttoAdapter() {
         // Get intent, action and MIME type
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -98,13 +110,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
                 }
             }
         }
-
-
-        setFloatingAction();
-        setRecyleViewLayout();
-        setSwipeRefreshLayout();
-
-
     }
 
     private void setFloatingAction() {
@@ -127,10 +132,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                getTweets(0);
+                  getTweets(0);
             }
         });
         // Configure the refreshing colors
@@ -372,9 +374,9 @@ public class TimelineActivity extends AppCompatActivity implements TweetDetailDi
         tweetOffline.setRetweetCount(0l);
         tweetOffline.setFavoriteCount(0l);
         User u = new User();
-        u.setScreenName("malleswari_s");
-        u.setName("Malleswari Saranu");
-        u.setProfileImageUrl("http://abs.twimg.com/sticky/default_profile_images/default_profile_5_normal.png");
+        u.setScreenName(OFFLINE_SCREEN_NAME);
+        u.setName(OFFLINE__NAME);
+        u.setProfileImageUrl(OFFLINE_PROFILE_URL);
         u.setVerified(false);
         tweetOffline.setUser(u);
         return tweetOffline;

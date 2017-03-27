@@ -11,6 +11,7 @@ import java.util.List;
  * Created by Saranu on 3/23/17.
  */
 
+//Offline DB service to persit data offline
 public class TweetOfflineService {
 
     public static void saveTweetsOffline(List<Tweet> tweetList){
@@ -23,7 +24,6 @@ public class TweetOfflineService {
             t.save();
             List<Tweet> tweetList2= SQLite.select().
                     from(Tweet.class).queryList();
-            int x=10;
         }
     }
 

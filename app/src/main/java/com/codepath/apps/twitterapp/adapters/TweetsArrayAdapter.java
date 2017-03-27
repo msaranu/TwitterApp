@@ -124,34 +124,26 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
           vh.tvUserName.setText(tweet.getUser().getName());
           vh.tvBody.setText(tweet.getText());
-        vh.tvHandle.setText(tweet.getUser().getScreenName());
-        vh.tvTime.setText(DateUtil.getRelativeTimeAgo(tweet.getCreatedAt()));//TODO: Convert to time
+          vh.tvHandle.setText(tweet.getUser().getScreenName());
+          vh.tvTime.setText(DateUtil.getRelativeTimeAgo(tweet.getCreatedAt()));//TODO: Convert to time
+            /*Commented Fenster Video Code
+                  String mUrl = tweet.getEntities().getMedia().get(0).getExpandedUrl();
+                  vh.fullSreenMediaPlayerController.setVisibilityListener(this.getContext());
+                  vh.textureView.setMediaController(vh.fullSreenMediaPlayerController);
+                  vh.textureView.setOnPlayStateListener(vh.fullSreenMediaPlayerController);
+                  vh.textureView.setVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
+                  vh.textureView.start();
+              */
 
-                //  String mUrl = tweet.getEntities().getMedia().get(0).getExpandedUrl();
-                  // vh.fullSreenMediaPlayerController.setVisibilityListener(this.getContext());
-                 //  vh.textureView.setMediaController(vh.fullSreenMediaPlayerController);
-                 // vh.textureView.setOnPlayStateListener(vh.fullSreenMediaPlayerController);
-             //   vh.textureView.setVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
-               // vh.textureView.start();
-             ImageView ivMedia = vh.ivMedia;
-            ivMedia.setImageResource(0);
-            if(tweet.getEntities() != null && tweet.getEntities().getMedia()
-                    !=null ){
-                String mUrl = tweet.getEntities().getMedia().get(0).getMediaUrl();
-                Glide.with(mContext).load(mUrl).placeholder(R.drawable.ic_launcher).
-                        error(R.drawable.ic_launcher).into(ivMedia);
 
+        if( tweet.getRetweetCount() !=0 && tweet.getFavoriteCount() !=0){
+
+          vh.tvRetweeted.setText(Long.toString(tweet.getRetweetCount()));
+          vh.tvFavorited.setText(Long.toString(tweet.getFavoriteCount()));
+        }else{
+          vh.tvRetweeted.setText("0");
+           vh.tvFavorited.setText("0");
         }
-
-
-if( tweet.getRetweetCount() !=0 && tweet.getFavoriteCount() !=0){
-
-    vh.tvRetweeted.setText(Long.toString(tweet.getRetweetCount()));
-    vh.tvFavorited.setText(Long.toString(tweet.getFavoriteCount()));
-}else{
-    vh.tvRetweeted.setText("0");
-    vh.tvFavorited.setText("0");
-}
 
         vh.ivFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,7 +170,7 @@ if( tweet.getRetweetCount() !=0 && tweet.getFavoriteCount() !=0){
 
     private void configureViewHolderNoImage(ViewHolderNoImage vhImage, Tweet tweet) {
             vhImage.tvUserName.setText(tweet.getUser().getName());
-        vhImage.tvBody.setText(tweet.getText());
+            vhImage.tvBody.setText(tweet.getText());
     }
 
 
@@ -193,7 +185,6 @@ if( tweet.getRetweetCount() !=0 && tweet.getFavoriteCount() !=0){
         @BindView(R.id.tvDot) public TextView tvDot;
         @BindView(R.id.tvTime) public TextView tvTime;
         @BindView(R.id.tvBody) public TextView tvBody;
-
         @BindView(R.id.ivMedia) public ImageView ivMedia;
         @BindView(R.id.ivReply) public ImageView ivReply;
         @BindView(R.id.ivRetweet) public ImageView ivRetweet;
@@ -202,7 +193,7 @@ if( tweet.getRetweetCount() !=0 && tweet.getFavoriteCount() !=0){
         @BindView(R.id.tvFavorited) public TextView tvFavorited;
 
 
-      //  @BindView(R.id.ivMedia2) public FensterVideoView textureView;
+      //@BindView(R.id.ivMedia2) public FensterVideoView textureView;
        // @BindView(R.id.ivMedia3) public SimpleMediaFensterPlayerController fullSreenMediaPlayerController;
 
 
@@ -336,7 +327,6 @@ if( tweet.getRetweetCount() !=0 && tweet.getFavoriteCount() !=0){
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-
 
         public TextView getTvBody() {
             return tvBody;

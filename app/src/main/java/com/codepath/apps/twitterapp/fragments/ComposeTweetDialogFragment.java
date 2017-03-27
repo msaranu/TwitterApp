@@ -34,11 +34,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.codepath.apps.twitterapp.properties.properties.MAX_TEXT_LENGTH;
+
 
 public class ComposeTweetDialogFragment extends DialogFragment implements MyAlertDialogFragment.MyAlertDialogFragmentListener {
 
     @BindView(R.id.tbTwitter) public Toolbar tbTwitter;
-
     @BindView(R.id.etReplyTweet) public EditText etReplyTweet;
     @BindView(R.id.tvCharsLeft) public TextView tvCharsLeft;
     @BindView(R.id.btTweetReply) public Button btTweetReply;
@@ -48,9 +49,7 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
 
 
     public ComposeTweetDialogFragment() {
-        // Empty constructor is required for DialogFragment
-        // Make sure not to add arguments to the constructor
-        // Use `newInstance` instead as shown below
+
     }
 
 
@@ -109,26 +108,9 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
 
         // Inflate a menu to be displayed in the toolbar
         tbTwitter.inflateMenu(R.menu.menu_twitter_fragment);
-        //  setHasOptionsMenu(true);
-        //     ((AppCompatActivity)getActivity()).setSupportActionBar(tbTwitter);
         return fView;
     }
 
-    /**
-     * the menu layout has the 'add/new' menu item
-     */
-  /*  @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
-        menu.clear();    //remove all items
-        menuInflater.inflate(R.menu.menu_twitter_fragment, menu);
-        super.onCreateOptionsMenu(menu, menuInflater);
-    }
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menu.clear();    //remove all items
-        getActivity().getMenuInflater().inflate(R.menu.menu_twitter_fragment, menu);
-    }*/
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -150,8 +132,6 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
         });
 
     }
-
-
 
 
     private void populateViewsfromObject(Bundle bundle) {
@@ -183,8 +163,7 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    int maxLength = 142;
-                    int charsRemaining = maxLength - s.length();
+                    int charsRemaining = MAX_TEXT_LENGTH - s.length();
                     tvCharsLeft.setText(Integer.toString(charsRemaining));
                     if (charsRemaining < 0) {
                         tvCharsLeft.setEnabled(false);
@@ -215,8 +194,6 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
         }else{
             saveDrafttoDB();
              dismiss();
-
-
         }
     }
 

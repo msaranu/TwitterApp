@@ -74,7 +74,6 @@ public class TwitterClient extends OAuthBaseClient {
         if(inReplyStatusID <0) {
             params.put("in_reply_to_status_id", inReplyStatusID);
         }
-
         client.post(apiUrl, params, handler);
 
     }

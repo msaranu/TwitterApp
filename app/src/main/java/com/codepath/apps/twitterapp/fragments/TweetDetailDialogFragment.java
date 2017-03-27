@@ -261,38 +261,27 @@ public class TweetDetailDialogFragment extends DialogFragment {
                 }
             });
 
-
         }
-
     }
 
 
     private void populateObjectfromViews() {
+        fillRecycleViewReply();
+        ComposeTweetDialogListener listener = (ComposeTweetDialogListener) getActivity();
+        listener.onFinishComposeTweetDialog(etReplyTweet.getText().toString(), tweet);
+        }
+
+    private void fillRecycleViewReply() {
         Tweet responseTweet = new TimelineActivity().constructOfflineTweetUser();
         rlTweetResponse.setVisibility(View.VISIBLE);
         rlReply.setVisibility(View.GONE);
-       // etReplyTweet.setFocusable(false);
-
-
-
-  /*      @BindView(R.id.rlTweetResponse) public RelativeLayout rlTweetResponse;
-        @BindView(R.id.ivResponseTweetImage)public ImageView ivResponseTweetImage;
-        @BindView(R.id.tvResponseUserName) public TextView tvResponseUserName;
-        @BindView(R.id.ivResponseVerified)public ImageView ivResponseVerified;
-        @BindView(R.id.tvResponseHandle) public TextView tvResponseHandle;
-        @BindView(R.id.tvResponseBody) public TextView tvResponseBody;*/
-
         Glide.with(getContext()).load(responseTweet.getUser().getProfileImageUrl()).placeholder(R.drawable.ic_launcher).
                 error(R.drawable.ic_launcher).into(ivResponseTweetImage);
         tvResponseUserName.setText(responseTweet.getUser().getName());
         tvResponseHandle.setText(responseTweet.getUser().getScreenName());
         tvResponseBody.setText(etReplyTweet.getText().toString());
 
-        ComposeTweetDialogListener listener = (ComposeTweetDialogListener) getActivity();
-        listener.onFinishComposeTweetDialog(etReplyTweet.getText().toString(), tweet);
-      //  dismiss();
-
-        }
     }
+}
 
 

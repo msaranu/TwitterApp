@@ -32,9 +32,7 @@ public class MyAlertDialogFragment extends DialogFragment {
 
 
     public MyAlertDialogFragment() {
-        // Empty constructor is required for DialogFragment
-        // Make sure not to add arguments to the constructor
-        // Use `newInstance` instead as shown below
+
     }
 
     public interface MyAlertDialogFragmentListener {
@@ -60,11 +58,9 @@ public class MyAlertDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //     getDialog().setTitle("Filter Settings");
         View fView = inflater.inflate(R.layout.fragment_draft_overlay, container);
         Bundle bundle = this.getArguments();
         ButterKnife.bind(this,fView);
-       // getDialog().getWindow().setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL);
         return fView;
     }
 
@@ -99,10 +95,7 @@ public class MyAlertDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
-
-
     }
-
 
     private void callParentFragment(boolean dismiss) {
         MyAlertDialogFragmentListener listener = (MyAlertDialogFragmentListener) getTargetFragment();
