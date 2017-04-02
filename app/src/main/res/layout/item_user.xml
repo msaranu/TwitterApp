@@ -50,8 +50,8 @@
         />
 
     <ImageView
-        android:layout_width="@dimen/profile_image_dimen"
-        android:layout_height="@dimen/profile_image_dimen"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         app:srcCompat="@drawable/friends_unfollow"
         android:id="@+id/ivFollow"
         android:layout_marginLeft="300dp" />
@@ -65,11 +65,10 @@
         android:autoLink="all"
         android:textColorLink="@color/blue"
         android:textColorHighlight="@color/blue"
-        android:layout_below="@+id/ivFollow"
+        android:layout_below="@+id/ivTweetImage"
         android:layout_alignLeft="@id/tvUserName"
         android:layout_alignStart="@id/tvUserName"
         />
-
 
 
 </RelativeLayout>

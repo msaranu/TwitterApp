@@ -223,10 +223,15 @@ public class TwitterClient extends OAuthBaseClient {
         client.post(apiUrl, params, handler);
     }
 
-    public void getDirectMessages(AsyncHttpResponseHandler handler) {
+    public void getDirectMessages(AsyncHttpResponseHandler handler,long id, boolean scroll) {
         String apiUrl = getApiUrl("direct_messages.json");
         RequestParams params = new RequestParams();
         params.put("count", 30);
+        if (scroll) { // Scroll Page
+            params.put("max_id", id);
+        } else { //pull to refresh or first page
+            params.put("since_id", 1);
+        }
         client.get(apiUrl, params, handler);
     }
 

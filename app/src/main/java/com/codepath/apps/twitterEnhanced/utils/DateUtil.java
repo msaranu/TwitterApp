@@ -37,7 +37,7 @@ public class DateUtil {
                 relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                         System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
             }
-                String[] splitString = relativeDate.split("\\s+");
+         /*       String[] splitString = relativeDate.split("\\s+");
                 if (splitString[1]!=null && splitString[1].toUpperCase().equals("SECONDS")) {
                     relativeDate = splitString[0] + 's';
                 } else if (splitString[1]!=null && splitString[1].toUpperCase().equals("MINUTES")) {
@@ -47,7 +47,7 @@ public class DateUtil {
                 }
                 if (splitString[1]!=null && splitString[1].toUpperCase().equals("DAYS")) {
                     relativeDate = splitString[0] + 'd';
-                }
+                }*/
             } catch (ParseException e1) {
             e1.printStackTrace();
         }

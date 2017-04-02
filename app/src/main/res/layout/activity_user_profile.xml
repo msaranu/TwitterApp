@@ -14,6 +14,7 @@
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
@@ -24,7 +25,8 @@
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-=
+
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tbTwitter"
                 android:layout_width="match_parent"
@@ -67,16 +69,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
          />
-
-   <!--     <FrameLayout
-            android:id="@+id/flContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/fragment"
-            android:layout_centerHorizontal="true">
-
-        </FrameLayout> -->
-
 
 
         <RelativeLayout
@@ -128,18 +120,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabComposeTweet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:src="@drawable/compose_new"
-            app:backgroundTint="@color/blue"
-            app:borderWidth="0dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            app:layout_anchorGravity="bottom|right" />
 
 
     </RelativeLayout>

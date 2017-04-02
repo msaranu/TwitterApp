@@ -118,8 +118,8 @@ public class TimelineActivity extends AppCompatActivity
         startActivity(i);
     }
 
-    public void onUserMessagesView(View v) {
-        Intent i = new Intent(this, UserProfileActivity.class);
+    public void onUserMessageView(View v) {
+        Intent i = new Intent(this, DirectMessageActivity.class);
         startActivity(i);
     }
 

@@ -17,6 +17,7 @@ import com.codepath.apps.twitterEnhanced.R;
 import com.codepath.apps.twitterEnhanced.activities.UserProfileActivity;
 import com.codepath.apps.twitterEnhanced.applications.TwitterApplication;
 import com.codepath.apps.twitterEnhanced.clients.TwitterClient;
+import com.codepath.apps.twitterEnhanced.models.Sender;
 import com.codepath.apps.twitterEnhanced.models.Tweet;
 import com.codepath.apps.twitterEnhanced.utils.DateUtil;
 import com.codepath.apps.twitterEnhanced.utils.PatternEditableBuilder;
@@ -45,7 +46,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     TwitterClient client;
     Tweet tweet;
 
-    private final int IMAGE = 0, NO_IMAGE = 1;
+    private final int IMAGE = 0, NO_IMAGE = 1,  DIRECT_MESSAGE=2;
 
     // Easy access to the context object in the recyclerview
     private Context getContext() {
@@ -69,7 +70,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     //Returns the view type of the item at position for the purposes of view recycling.
     @Override
     public int getItemViewType(int position) {
-        if (mTweets.get(position).getId() == 0) {
+        if (mTweets.get(position).getId() == 0 || mTweets.get(position).getUser() ==null) {
             return NO_IMAGE;
         } else
             return IMAGE;
@@ -106,6 +107,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 tweetView = inflater.inflate(R.layout.item_user, parent, false);
                 viewHolder = new ViewHolderNoImage(tweetView);
                 break;
+
             default:
                 return null;
 
@@ -281,38 +283,83 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private void configureViewHolderNoImage(ViewHolderNoImage vh, Tweet tweet) {
-        final ImageView ivImage = vh.ivTweetImage;
-        ivImage.setImageResource(0);
-        if (tweet.getUser() != null && tweet.getUser().getProfileImageUrl() != null) {
-            String url = tweet.getUser().getProfileImageUrl();
-            Glide.with(mContext).load(url).placeholder(R.drawable.placeholder).
-                    error(R.drawable.ic_launcher).into(ivImage);
-        }
 
-        final String screenName = tweet.getUser().getScreenName();
-        ivImage.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), UserProfileActivity.class);
-                i.putExtra("screen_name", screenName);
-                v.getContext().startActivity(i);
+        if(tweet.getUser() != null ) {
+            final ImageView ivImage = vh.ivTweetImage;
+            ivImage.setImageResource(0);
+            if (tweet.getUser() != null && tweet.getUser().getProfileImageUrl() != null) {
+                String url = tweet.getUser().getProfileImageUrl();
+                Glide.with(mContext).load(url).placeholder(R.drawable.placeholder).
+                        error(R.drawable.ic_launcher).into(ivImage);
             }
-        });
 
-        vh.tvUserName.setText(tweet.getUser().getName());
-        vh.tvBody.setText(tweet.getText());
-        vh.tvHandle.setText(tweet.getUser().getScreenName());
+            final String screenName = tweet.getUser().getScreenName();
+            ivImage.setOnClickListener(new View.OnClickListener() {
 
-        new PatternEditableBuilder().
-                addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
-                        new PatternEditableBuilder.SpannableClickedListener() {
-                            @Override
-                            public void onSpanClicked(String text) {
-                                Toast.makeText(getContext(), "Clicked username: " + text,
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }).into(vh.tvBody);
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(v.getContext(), UserProfileActivity.class);
+                    i.putExtra("screen_name", screenName);
+                    v.getContext().startActivity(i);
+                }
+            });
+
+            vh.tvUserName.setText(tweet.getUser().getName());
+            vh.tvBody.setText(tweet.getText());
+            vh.tvHandle.setText(tweet.getUser().getScreenName());
+
+            new PatternEditableBuilder().
+                    addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
+                            new PatternEditableBuilder.SpannableClickedListener() {
+                                @Override
+                                public void onSpanClicked(String text) {
+                                    Toast.makeText(getContext(), "Clicked username: " + text,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }).into(vh.tvBody);
+        }else{
+            final ImageView ivImage = vh.ivTweetImage;
+            Sender s = tweet.getDirectMessage().getSender();
+            ivImage.setImageResource(0);
+            if (s.getProfileImageUrl() != null ) {
+                String url = s.getProfileImageUrl();
+                Glide.with(mContext).load(url).placeholder(R.drawable.placeholder).
+                        error(R.drawable.ic_launcher).into(ivImage);
+            }
+
+            final String screenName = s.getScreenName();
+            ivImage.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(v.getContext(), UserProfileActivity.class);
+                    i.putExtra("screen_name", screenName);
+                    v.getContext().startActivity(i);
+                }
+            });
+
+            vh.tvUserName.setText(s.getName());
+            String textMessage = tweet.getDirectMessage().getText() + " @ "
+                    + DateUtil.getRelativeTimeAgo(tweet.getDirectMessage().getCreatedAt());
+            vh.tvBody.setText(textMessage);
+            vh.tvHandle.setText('@' + tweet.getDirectMessage().getSenderScreenName());
+            if(tweet.getDirectMessage().getSenderScreenName().toUpperCase().equals("MALLESWARI_S")){
+                vh.tvBody.setTextColor(Color.BLUE);
+            }else{
+                vh.tvBody.setTextColor(Color.RED);
+
+            }
+
+            new PatternEditableBuilder().
+                    addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
+                            new PatternEditableBuilder.SpannableClickedListener() {
+                                @Override
+                                public void onSpanClicked(String text) {
+                                    Toast.makeText(getContext(), "Clicked username: " + text,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }).into(vh.tvBody);
+        }
 
     }
 

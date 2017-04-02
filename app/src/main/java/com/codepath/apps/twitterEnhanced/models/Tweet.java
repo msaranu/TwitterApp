@@ -70,8 +70,15 @@ public class Tweet extends BaseModel implements Parcelable {
 
     private Entities entities;
 
+    public DirectMessage directMessage;
 
+    public DirectMessage getDirectMessage() {
+        return directMessage;
+    }
 
+    public void setDirectMessage(DirectMessage directMessage) {
+        this.directMessage = directMessage;
+    }
 
     public Tweet(){
         super();

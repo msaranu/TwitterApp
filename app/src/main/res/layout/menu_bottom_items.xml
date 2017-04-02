@@ -38,7 +38,7 @@
         android:layout_height="30dp"
         android:layout_marginRight="20dp"
         android:layout_toRightOf="@id/ivToolbarExplore"
-        android:onClick="onUserMessagesView"
+        android:onClick="onUserMessageView"
         app:srcCompat="@drawable/ic_vector_messages" />
 
 
@@ -46,8 +46,17 @@
         android:id="@+id/ivToolbarNotifications"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginRight="200dp"
         android:layout_toRightOf="@id/ivToolbarMessages"
         app:srcCompat="@drawable/ic_twitterbell" />
+
+
+    <ImageView
+        android:id="@+id/ivSendDM"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:onClick="onUserMessageSend"
+        android:layout_toRightOf="@id/ivToolbarNotifications"
+        android:layout_marginRight="200dp"
+        app:srcCompat="@drawable/ic_write_dm" />
 
 </RelativeLayout>
