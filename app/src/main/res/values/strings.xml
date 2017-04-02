@@ -13,5 +13,8 @@
     <string name="retweet_label">RETWEETS</string>
     <string name="retweet_like">LIKES</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>

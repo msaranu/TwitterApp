@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
@@ -19,7 +20,7 @@
         android:id="@+id/ivTweetImage" />
 
     <TextView
-        android:text="User Name"
+        android:text="UserName"
         android:layout_width="wrap_content"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -37,7 +38,6 @@
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@+id/tvUserName"
         android:layout_toEndOf="@+id/tvUserName" />
-
     <TextView
         android:text="Handle"
         android:layout_width="wrap_content"
@@ -138,7 +138,7 @@
         android:layout_toEndOf="@id/ivReply"
         android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
-        app:srcCompat="@drawable/twitter_retweet_grey"
+        app:srcCompat="@drawable/ic_retweet_vector"
         android:id="@+id/ivRetweet" />
 
     <TextView
@@ -159,7 +159,7 @@
         android:layout_below="@id/ivMedia"
         android:layout_toRightOf="@id/tvRetweeted"
         android:layout_toEndOf="@id/tvRetweeted"
-        app:srcCompat="@drawable/grey_heart"
+        app:srcCompat="@drawable/ic_vector_heart"
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:id="@+id/ivFavorite" />

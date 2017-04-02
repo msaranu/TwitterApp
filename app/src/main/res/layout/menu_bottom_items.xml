@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivToolbarUserProfile"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:onClick="onUserProfileView"
+        android:layout_marginRight="20dp"
+        app:srcCompat="@drawable/ic_person_outline_black_24dp" />
+
+    <TextView
+        android:id="@+id/ivToolbarUserProfileText"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/ivToolbarUserProfile"
+        android:text="Me"
+        android:layout_marginLeft="5dp"
+        android:textSize="10sp"/>
+
+    <ImageView
+        android:id="@+id/ivToolbarExplore"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_toRightOf="@id/ivToolbarUserProfile"
+        android:onClick="onUserExploreView"
+        app:srcCompat="@drawable/ic_vector_explore" />
+
+
+    <ImageView
+        android:id="@+id/ivToolbarMessages"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_toRightOf="@id/ivToolbarExplore"
+        android:onClick="onUserMessagesView"
+        app:srcCompat="@drawable/ic_vector_messages" />
+
+
+    <ImageView
+        android:id="@+id/ivToolbarNotifications"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="200dp"
+        android:layout_toRightOf="@id/ivToolbarMessages"
+        app:srcCompat="@drawable/ic_twitterbell" />
+
+</RelativeLayout>

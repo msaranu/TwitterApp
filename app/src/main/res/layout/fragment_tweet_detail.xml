@@ -202,7 +202,7 @@
                android:layout_toRightOf="@id/ivReply"
                android:layout_toEndOf="@id/ivReply"
                android:layout_marginRight="35dp"
-               app:srcCompat="@drawable/twitter_retweet_grey"
+               app:srcCompat="@drawable/ic_retweet_vector"
                android:id="@+id/ivRetweet" />
 
            <ImageView
@@ -211,7 +211,7 @@
                android:layout_below="@id/seperatorview_3"
                android:layout_toRightOf="@id/ivRetweet"
                android:layout_toEndOf="@id/ivRetweet"
-               app:srcCompat="@drawable/grey_heart"
+               app:srcCompat="@drawable/ic_vector_heart"
                android:layout_marginTop="5dp"
                android:layout_marginRight="35dp"
                android:id="@+id/ivFavorite" />

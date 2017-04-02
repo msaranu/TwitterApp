@@ -77,8 +77,6 @@
             android:text="@string/max_text_length"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/btTweetReply"
-            android:layout_toStartOf="@id/btTweetReply"
             android:textColor="@color/darkGrey"
             android:id="@+id/tvCharsLeft" />
 
@@ -90,6 +88,8 @@
             android:background="@drawable/rounded_corners_blue"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/tvCharsLeft"
+            android:layout_toEndOf="@id/tvCharsLeft"
             android:onClick="OnSubmitTweet"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
