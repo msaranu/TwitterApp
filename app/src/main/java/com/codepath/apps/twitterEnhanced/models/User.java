@@ -61,6 +61,16 @@ public class User extends BaseModel implements Parcelable{
     @Column
     private long favouritesCount;
 
+    public long cursorID =-1;
+
+    public long getCursorID() {
+        return cursorID;
+    }
+
+    public void setCursorID(long cursorID) {
+        this.cursorID = cursorID;
+    }
+
     public long getFriendsCount() {
         return friendsCount;
     }

@@ -1,5 +1,6 @@
 package com.codepath.apps.twitterEnhanced.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -30,6 +31,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class HomeTimelineFragment extends TimelineFragment {
     private TwitterClient client;
+    ProgressDialog pd;
 
 
     @Override
@@ -51,6 +53,13 @@ public class HomeTimelineFragment extends TimelineFragment {
             id = tweets.get(tweets.size() - 1).getId() - 1;
             scroll = true;
         }
+
+        pd = new ProgressDialog(getActivity());
+        pd.setTitle("Loading...");
+        pd.setMessage("Please wait.");
+        pd.setCancelable(false);
+        pd.show();
+
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
@@ -69,6 +78,8 @@ public class HomeTimelineFragment extends TimelineFragment {
                     tweetofflineservice.saveTweetsOffline(tweetList);
                     tweets.addAll(tweetList);
                     adapter.notifyDataSetChanged();
+                    pd.dismiss();
+
 
                 }
             }
@@ -82,20 +93,25 @@ public class HomeTimelineFragment extends TimelineFragment {
                             Toast.LENGTH_LONG).show();
                 } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
                         Toast.LENGTH_LONG).show();
+                pd.dismiss();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
+                pd.dismiss();
                 if (errorResponse.toString().contains("Too Many Requests")) {
                     Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
                 } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
                         Toast.LENGTH_LONG).show();
+                pd.dismiss();
 
             }
 
         }, id, scroll);
+
+
 
 
     }

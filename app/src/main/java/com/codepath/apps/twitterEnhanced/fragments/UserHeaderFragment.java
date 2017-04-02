@@ -1,6 +1,7 @@
 
 package com.codepath.apps.twitterEnhanced.fragments;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterEnhanced.R;
+import com.codepath.apps.twitterEnhanced.activities.UserListActivity;
 import com.codepath.apps.twitterEnhanced.applications.TwitterApplication;
 import com.codepath.apps.twitterEnhanced.clients.TwitterClient;
 import com.codepath.apps.twitterEnhanced.databinding.FragmentUserHeaderBinding;
@@ -38,6 +41,9 @@ public class UserHeaderFragment extends android.support.v4.app.Fragment {
     String screenName;
     FragmentUserHeaderBinding fragmentUserHeaderBinding;
     @BindView(R.id.ivTweetImage) public ImageView ivTweetImage;
+    @BindView(R.id.tvFollowersLabel) public TextView tvFollowersLabel;
+    @BindView(R.id.tvFollowingLabel) public TextView tvFollowingLabel;
+
     //  @BindView(R.id.ivProfileBackground) public ImageView ivProfileBackground;
 
     @Override
@@ -45,7 +51,6 @@ public class UserHeaderFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
         screenName=  getArguments().getString("screen_name");
-
         populateUserHeader();
     }
 
@@ -84,6 +89,25 @@ public class UserHeaderFragment extends android.support.v4.app.Fragment {
                     user = gson.fromJson(response.toString(), User.class);
                     fragmentUserHeaderBinding.setUser(user);
                     setImageUrl(ivTweetImage, user.getProfileImageUrl());
+                    tvFollowersLabel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), UserListActivity.class);
+                            intent.putExtra("screen_name", user.getScreenName());
+                            intent.putExtra("followers", 'Y');
+                            startActivity(intent);
+                        }
+                    });
+
+                    tvFollowingLabel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), UserListActivity.class);
+                            intent.putExtra("screen_name", user.getScreenName());
+                            startActivity(intent);
+                        }
+                    });
+
                     //   setImageUrl(ivProfileBackground,user.getProfileBackgroundImageUrl());//backgrondImage
                     if (user == null) {
                         Toast.makeText(getContext(), "NO TWEET MENTIONS",
@@ -116,6 +140,26 @@ public class UserHeaderFragment extends android.support.v4.app.Fragment {
                     user = gson.fromJson(response.toString(), User.class);
                     fragmentUserHeaderBinding.setUser(user);
                     setImageUrl(ivTweetImage, user.getProfileImageUrl());
+                    tvFollowersLabel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), UserListActivity.class);
+                            intent.putExtra("screen_name", user.getScreenName());
+                            intent.putExtra("followers", "Y");
+
+                            startActivity(intent);
+                        }
+                    });
+
+                    tvFollowingLabel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(getActivity(), UserListActivity.class);
+                            intent.putExtra("screen_name", user.getScreenName());
+                            startActivity(intent);
+                        }
+                    });
+
                     //   setImageUrl(ivProfileBackground,user.getProfileBackgroundImageUrl());//backgrondImage
                     if (user == null) {
                         Toast.makeText(getContext(), "NO TWEET MENTIONS",

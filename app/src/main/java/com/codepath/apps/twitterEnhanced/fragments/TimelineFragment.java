@@ -42,10 +42,12 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment {
  //   @BindView(R.id.fabComposeTweet)
   //  FloatingActionButton fabComposeTweet;
     Tweet composeTweet;
+    long cursorID = -1;
 
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
    @Override
@@ -131,7 +133,9 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getTweets(page);
+                if(cursorID !=0) {
+                    getTweets(page);
+                }
             }
         };
         // Adds the scroll listener to RecyclerView

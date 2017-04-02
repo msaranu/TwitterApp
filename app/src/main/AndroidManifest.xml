@@ -47,6 +47,7 @@
         <activity android:name=".activities.TimelineActivity" />
         <activity android:name=".activities.UserProfileActivity" />
         <activity android:name=".activities.UserExploreActivity"></activity>
+        <activity android:name=".activities.UserListActivity"></activity>
     </application>
 
 </manifest>

@@ -162,6 +162,7 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("screen_name", screenName);
         params.put("skip_Status", true);
         params.put("cursor", id);
+        params.put("include_user_entities",false);
         client.get(apiUrl, params, handler);
     }
 
@@ -173,6 +174,7 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("screen_name", screenName);
         params.put("skip_Status", true);
         params.put("cursor", id);
+        params.put("include_user_entities",false);
         client.get(apiUrl, params, handler);
     }
 

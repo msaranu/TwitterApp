@@ -42,6 +42,8 @@ public class TimelineActivity extends AppCompatActivity {
     TabLayout tlTwitter;
     private TwitterClient client;
     Toolbar toolbar;
+    MenuItem miActionProgressItem;
+
 
     public TimelineActivity() {
     }
@@ -183,5 +185,26 @@ public class TimelineActivity extends AppCompatActivity {
         tweetOffline.setUser(u);
         return tweetOffline;
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+
+        return super.onPrepareOptionsMenu(menu);
+
+    }
+
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
+    }
+
+
 }
 

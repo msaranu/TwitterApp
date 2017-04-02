@@ -33,7 +33,6 @@
                     android:layout_height="50dp"
                     app:srcCompat="@drawable/twitter" />
 
-
             </LinearLayout>
 
         </android.support.v7.widget.Toolbar>
@@ -41,33 +40,20 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/tablay"
+        <FrameLayout
+            android:id="@+id/fragmentUserList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/tbBottomLayout"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            />
 
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tlTwitter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabMode="fixed" />
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/vpTwitter"
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="0.68"
-                android:background="@android:color/white" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/tbBottomLayout"
@@ -98,7 +84,6 @@
         android:src="@drawable/compose_new"
         app:backgroundTint="@color/blue"
         app:borderWidth="0dp"
-        app:layout_anchor="@id/vpTwitter"
         app:layout_anchorGravity="bottom|right" />
 
 </android.support.design.widget.CoordinatorLayout>

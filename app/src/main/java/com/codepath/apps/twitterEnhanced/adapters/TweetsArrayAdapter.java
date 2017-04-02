@@ -2,20 +2,24 @@ package com.codepath.apps.twitterEnhanced.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterEnhanced.R;
 import com.codepath.apps.twitterEnhanced.activities.UserProfileActivity;
 import com.codepath.apps.twitterEnhanced.models.Tweet;
 import com.codepath.apps.twitterEnhanced.utils.DateUtil;
+import com.codepath.apps.twitterEnhanced.utils.PatternEditableBuilder;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +46,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public TweetsArrayAdapter(Context context, List<Tweet> articles) {
         mTweets = articles;
         mContext = context;
+        setHasStableIds(true);
     }
 
     // Returns the total count of items in the list
@@ -53,11 +58,15 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     //Returns the view type of the item at position for the purposes of view recycling.
     @Override
     public int getItemViewType(int position) {
-        if (mTweets.get(position).getUser() == null &&
-                mTweets.get(position).getUser().getProfileImageUrl() == null){
+        if (mTweets.get(position).getId() == 0){
             return NO_IMAGE;
         } else
             return IMAGE;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
@@ -83,7 +92,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 viewHolder = new ViewHolder(tweetView);
                 break;
             case NO_IMAGE:
-                tweetView = inflater.inflate(R.layout.item_tweet_image, parent, false);
+                tweetView = inflater.inflate(R.layout.item_user, parent, false);
                 viewHolder = new ViewHolderNoImage(tweetView);
                 break;
             default:
@@ -116,6 +125,8 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+
+
     private void configureViewHolder(final ViewHolder vh, Tweet tweet) {
         final ImageView ivImage = vh.ivTweetImage;
         ivImage.setImageResource(0);
@@ -140,6 +151,17 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         vh.tvBody.setText(tweet.getText());
         vh.tvHandle.setText(tweet.getUser().getScreenName());
         vh.tvTime.setText(DateUtil.getRelativeTimeAgo(tweet.getCreatedAt()));//TODO: Convert to time
+
+
+        new PatternEditableBuilder().
+                addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
+                        new PatternEditableBuilder.SpannableClickedListener() {
+                            @Override
+                            public void onSpanClicked(String text) {
+                                Toast.makeText(getContext(), "Clicked username: " + text,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }).into(vh.tvBody);
 
         //  String mUrl = tweet.getEntities().getMedia().get(0).getExpandedUrl();
         // vh.fullSreenMediaPlayerController.setVisibilityListener(this.getContext());
@@ -189,9 +211,40 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     }
 
-    private void configureViewHolderNoImage(ViewHolderNoImage vhImage, Tweet tweet) {
-            vhImage.tvUserName.setText(tweet.getUser().getName());
-            vhImage.tvBody.setText(tweet.getText());
+    private void configureViewHolderNoImage(ViewHolderNoImage vh, Tweet tweet) {
+        final ImageView ivImage = vh.ivTweetImage;
+        ivImage.setImageResource(0);
+        if (tweet.getUser()!=null && tweet.getUser().getProfileImageUrl() !=null) {
+            String url = tweet.getUser().getProfileImageUrl();
+            Glide.with(mContext).load(url).placeholder(R.drawable.placeholder).
+                    error(R.drawable.ic_launcher).into(ivImage);
+        }
+
+        final String screenName = tweet.getUser().getScreenName();
+        ivImage.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), UserProfileActivity.class);
+                i.putExtra("screen_name", screenName);
+                v.getContext().startActivity(i);
+            }
+        });
+
+        vh.tvUserName.setText(tweet.getUser().getName());
+        vh.tvBody.setText(tweet.getText());
+        vh.tvHandle.setText(tweet.getUser().getScreenName());
+
+        new PatternEditableBuilder().
+                addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
+                        new PatternEditableBuilder.SpannableClickedListener() {
+                            @Override
+                            public void onSpanClicked(String text) {
+                                Toast.makeText(getContext(), "Clicked username: " + text,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }).into(vh.tvBody);
+
     }
 
 
@@ -337,16 +390,52 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }*/
     }
     public static class ViewHolderNoImage extends RecyclerView.ViewHolder {
+        @BindView(R.id.ivTweetImage) public ImageView ivTweetImage;
+        @BindView(R.id.tvUserName) public TextView tvUserName;
+        @BindView(R.id.ivVerified) public ImageView ivVerified;
+        @BindView(R.id.tvHandle) public TextView tvHandle;
+        @BindView(R.id.tvBody) public TextView tvBody;
 
-        @BindView(R.id.tvBody)
-        public TextView tvBody;
-        @BindView(R.id.tvUserName)
-        public TextView tvUserName;
+
+        //@BindView(R.id.ivMedia2) public FensterVideoView textureView;
+        // @BindView(R.id.ivMedia3) public SimpleMediaFensterPlayerController fullSreenMediaPlayerController;
 
 
         public ViewHolderNoImage(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+
+        public ImageView getIvVerified() {
+            return ivVerified;
+        }
+
+        public void setIvVerified(ImageView ivVerified) {
+            this.ivVerified = ivVerified;
+        }
+
+        public TextView getTvHandle() {
+            return tvHandle;
+        }
+
+        public void setTvHandle(TextView tvHandle) {
+            this.tvHandle = tvHandle;
+        }
+
+        public ImageView getIvTweetImage() {
+            return ivTweetImage;
+        }
+
+        public void setIvTweetImage(ImageView ivTweetImage) {
+            this.ivTweetImage = ivTweetImage;
+        }
+
+        public TextView getTvUserName() {
+            return tvUserName;
+        }
+
+        public void setTvUserName(TextView tvUserName) {
+            this.tvUserName = tvUserName;
         }
 
         public TextView getTvBody() {
@@ -357,12 +446,6 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.tvBody = tvBody;
         }
 
-        public TextView getTvUserName() {
-            return tvUserName;
-        }
 
-        public void setTvUserName(TextView tvUserName) {
-            this.tvUserName = tvUserName;
-        }
     }
 }
