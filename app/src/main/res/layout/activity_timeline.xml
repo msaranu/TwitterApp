@@ -90,15 +90,4 @@
 
     </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabComposeTweet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:src="@drawable/compose_new"
-        app:backgroundTint="@color/blue"
-        app:borderWidth="0dp"
-        app:layout_anchor="@id/vpTwitter"
-        app:layout_anchorGravity="bottom|right" />
-
 </android.support.design.widget.CoordinatorLayout>

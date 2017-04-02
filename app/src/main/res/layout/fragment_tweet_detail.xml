@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="10dp">
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tbTwitter"
@@ -185,12 +186,12 @@
 
 
            <ImageView
-               android:layout_width="25dp"
-               android:layout_height="25dp"
+               android:layout_width="30dp"
+               android:layout_height="30dp"
                android:layout_below="@+id/seperatorview_3"
                android:layout_alignLeft="@id/ivMedia"
                android:layout_alignStart="@id/ivMedia"
-               app:srcCompat="@drawable/reply_grey"
+               app:srcCompat="@drawable/ic_vector_reply"
                android:layout_alignBaseline="@id/ivMedia"
                android:layout_marginRight="35dp"
                android:id="@+id/ivReply" />
@@ -212,7 +213,7 @@
                android:layout_toRightOf="@id/ivRetweet"
                android:layout_toEndOf="@id/ivRetweet"
                app:srcCompat="@drawable/ic_vector_heart"
-               android:layout_marginTop="5dp"
+               android:layout_marginTop="2dp"
                android:layout_marginRight="35dp"
                android:id="@+id/ivFavorite" />
 
@@ -312,6 +313,7 @@
         android:textColor="@color/darkGrey"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
+        android:textSize="12dp"
         android:background="@drawable/rounded_corners"
         android:id="@+id/etReplyTweet" />
 

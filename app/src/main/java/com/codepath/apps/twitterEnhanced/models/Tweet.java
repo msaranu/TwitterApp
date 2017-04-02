@@ -81,7 +81,12 @@ public class Tweet extends BaseModel implements Parcelable {
         id = in.readLong();
         createdAt = in.readString();
         favoriteCount = in.readLong();
+        favoriteCount = in.readLong();
+        retweetCount = in.readLong();
         text = in.readString();
+        favorited = in.readByte() != 0;
+        retweeted = in.readByte() != 0;
+
     }
 
     public static final Creator<Tweet> CREATOR = new Creator<Tweet>() {
@@ -186,6 +191,9 @@ public class Tweet extends BaseModel implements Parcelable {
         dest.writeLong(id);
         dest.writeString(createdAt);
         dest.writeLong(favoriteCount);
+        dest.writeLong(retweetCount);
         dest.writeString(text);
+        dest.writeByte((byte) (favorited ? 1 : 0));
+        dest.writeByte((byte) (retweeted ? 1 : 0));
     }
 }

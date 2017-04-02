@@ -176,11 +176,15 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
 
         }
     }
+    public interface ComposeTweetModalDialogListener {
+        void onFinishComposeModalTweetDialog(String tweetText, Tweet tweet);
+    }
 
 
     private void populateObjectfromViews() {
-        TweetDetailDialogFragment.ComposeTweetDialogListener listener = (TweetDetailDialogFragment.ComposeTweetDialogListener) getActivity();
-        listener.onFinishComposeTweetDialog(etReplyTweet.getText().toString(), tweet);
+         ComposeTweetModalDialogListener  listener =
+                (ComposeTweetModalDialogListener) getTargetFragment();
+        listener.onFinishComposeModalTweetDialog(etReplyTweet.getText().toString(), tweet);
         dismiss();
 
     }

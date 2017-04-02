@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +15,22 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.twitterEnhanced.R;
 import com.codepath.apps.twitterEnhanced.activities.UserProfileActivity;
+import com.codepath.apps.twitterEnhanced.applications.TwitterApplication;
+import com.codepath.apps.twitterEnhanced.clients.TwitterClient;
 import com.codepath.apps.twitterEnhanced.models.Tweet;
 import com.codepath.apps.twitterEnhanced.utils.DateUtil;
 import com.codepath.apps.twitterEnhanced.utils.PatternEditableBuilder;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by Saranu on 3/21/17.
@@ -34,6 +42,8 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<Tweet> mTweets;
     // Store the context for easy access
     private Context mContext;
+    TwitterClient client;
+    Tweet tweet;
 
     private final int IMAGE = 0, NO_IMAGE = 1;
 
@@ -46,6 +56,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public TweetsArrayAdapter(Context context, List<Tweet> articles) {
         mTweets = articles;
         mContext = context;
+        client = TwitterApplication.getRestClient();
         setHasStableIds(true);
     }
 
@@ -58,7 +69,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     //Returns the view type of the item at position for the purposes of view recycling.
     @Override
     public int getItemViewType(int position) {
-        if (mTweets.get(position).getId() == 0){
+        if (mTweets.get(position).getId() == 0) {
             return NO_IMAGE;
         } else
             return IMAGE;
@@ -109,7 +120,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Tweet tweet = mTweets.get(position);
+         tweet = mTweets.get(position);
 
         switch (viewHolder.getItemViewType()) {
             case IMAGE:
@@ -126,11 +137,10 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
-
-    private void configureViewHolder(final ViewHolder vh, Tweet tweet) {
+    private void configureViewHolder(final ViewHolder vh, final Tweet tweet) {
         final ImageView ivImage = vh.ivTweetImage;
         ivImage.setImageResource(0);
-        if (tweet.getUser()!=null && tweet.getUser().getProfileImageUrl() !=null) {
+        if (tweet.getUser() != null && tweet.getUser().getProfileImageUrl() != null) {
             String url = tweet.getUser().getProfileImageUrl();
             Glide.with(mContext).load(url).placeholder(R.drawable.placeholder).
                     error(R.drawable.ic_launcher).into(ivImage);
@@ -154,7 +164,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
         new PatternEditableBuilder().
-                addPattern(Pattern.compile("\\@(\\w+)"), Color.BLUE,
+                addPattern(Pattern.compile("\\@(\\w+)"), R.color.twitterBlue,
                         new PatternEditableBuilder.SpannableClickedListener() {
                             @Override
                             public void onSpanClicked(String text) {
@@ -163,38 +173,67 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             }
                         }).into(vh.tvBody);
 
-        //  String mUrl = tweet.getEntities().getMedia().get(0).getExpandedUrl();
-        // vh.fullSreenMediaPlayerController.setVisibilityListener(this.getContext());
-        //  vh.textureView.setMediaController(vh.fullSreenMediaPlayerController);
-        // vh.textureView.setOnPlayStateListener(vh.fullSreenMediaPlayerController);
-        //   vh.textureView.setVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
-        // vh.textureView.start();
         ImageView ivMedia = vh.ivMedia;
         ivMedia.setImageResource(0);
-        if(tweet.getEntities() != null && tweet.getEntities().getMedia()
-                !=null ){
+        if (tweet.getEntities() != null && tweet.getEntities().getMedia()
+                != null) {
             String mUrl = tweet.getEntities().getMedia().get(0).getMediaUrl();
             Glide.with(mContext).load(mUrl).placeholder(R.drawable.ic_launcher).
                     error(R.drawable.ic_launcher).into(ivMedia);
 
         }
 
-        if( tweet.getRetweetCount() !=0 && tweet.getFavoriteCount() !=0){
+        if (tweet.getRetweetCount() != 0 && tweet.getFavoriteCount() != 0) {
 
-          vh.tvRetweeted.setText(Long.toString(tweet.getRetweetCount()));
-          vh.tvFavorited.setText(Long.toString(tweet.getFavoriteCount()));
-        }else{
-          vh.tvRetweeted.setText("0");
-           vh.tvFavorited.setText("0");
+            vh.tvRetweeted.setText(Long.toString(tweet.getRetweetCount()));
+            vh.tvFavorited.setText(Long.toString(tweet.getFavoriteCount()));
+        } else {
+            vh.tvRetweeted.setText("0");
+            vh.tvFavorited.setText("0");
+        }
+
+        if(tweet.retweeted){
+            vh.ivRetweet.setImageResource(R.drawable.ic_vector_retweet_green);
+        }
+
+        if(tweet.favorited){
+            vh.ivFavorite.setImageResource(R.drawable.ic_vector_heart_red);
         }
 
         vh.ivFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                vh.ivFavorite.setImageResource(R.drawable.red_heart);
-                long lv = Long.parseLong(vh.tvFavorited.getText().toString());
-                vh.tvFavorited.setText(Long.toString(lv+1l));
+                client.setFavoriteIcon(new JsonHttpResponseHandler() {
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if(tweet.favorited) {
+                            vh.ivFavorite.setImageResource(R.drawable.ic_vector_heart);
+                        }else{
+                            vh.ivFavorite.setImageResource(R.drawable.ic_vector_heart_red);
+                        }
+                        tweet.favorited = !tweet.favorited;
+                        try {
+                            String favoriteCount= response.getString("favorite_count");
+                            vh.tvFavorited.setText(favoriteCount);
+                            tweet.setFavoriteCount(Long.parseLong(favoriteCount));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.d("DEBUG", errorResponse.toString());
+                        if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
+                            Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
+                                    Toast.LENGTH_LONG).show();
+                        } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                },tweet.getId(), tweet.favorited);
+
             }
         });
 
@@ -202,19 +241,49 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         vh.ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vh.ivRetweet.setImageResource(R.drawable.twitter_retweet_green);
-                long lv = Long.parseLong(vh.tvRetweeted.getText().toString());
-                vh.tvRetweeted.setText(Long.toString(lv+1l));
+
+                client.setRetweet(new JsonHttpResponseHandler() {
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if(tweet.retweeted) {
+                            vh.ivRetweet.setImageResource(R.drawable.ic_retweet_vector);
+                        }else{
+                            vh.ivRetweet.setImageResource(R.drawable.ic_vector_retweet_green);
+                        }
+                        tweet.retweeted = !tweet.retweeted;
+                        try {
+                            String reTweetCount= response.getString("retweet_count");
+                            vh.tvRetweeted.setText(reTweetCount);
+                            tweet.setRetweetCount(Long.parseLong(reTweetCount));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        Log.d("DEBUG", errorResponse.toString());
+                        if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
+                            Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
+                                    Toast.LENGTH_LONG).show();
+                        } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    public void onFailure(int statusCode, Header[] header, String s1, Throwable t1){
+                        Log.d("DEBUG", s1.toString());
+                    }
+                },tweet.getId(), tweet.retweeted);
+
             }
         });
-
 
     }
 
     private void configureViewHolderNoImage(ViewHolderNoImage vh, Tweet tweet) {
         final ImageView ivImage = vh.ivTweetImage;
         ivImage.setImageResource(0);
-        if (tweet.getUser()!=null && tweet.getUser().getProfileImageUrl() !=null) {
+        if (tweet.getUser() != null && tweet.getUser().getProfileImageUrl() != null) {
             String url = tweet.getUser().getProfileImageUrl();
             Glide.with(mContext).load(url).placeholder(R.drawable.placeholder).
                     error(R.drawable.ic_launcher).into(ivImage);
@@ -252,23 +321,36 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     // Used to cache the views within the item layout for fast access
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.ivTweetImage) public ImageView ivTweetImage;
-        @BindView(R.id.tvUserName) public TextView tvUserName;
-        @BindView(R.id.ivVerified) public ImageView ivVerified;
-        @BindView(R.id.tvHandle) public TextView tvHandle;
-        @BindView(R.id.tvDot) public TextView tvDot;
-        @BindView(R.id.tvTime) public TextView tvTime;
-        @BindView(R.id.tvBody) public TextView tvBody;
-        @BindView(R.id.ivMedia) public ImageView ivMedia;
-        @BindView(R.id.ivReply) public ImageView ivReply;
-        @BindView(R.id.ivRetweet) public ImageView ivRetweet;
-        @BindView(R.id.tvRetweeted) public TextView tvRetweeted;
-        @BindView(R.id.ivFavorite) public ImageView ivFavorite;
-        @BindView(R.id.tvFavorited) public TextView tvFavorited;
+        @BindView(R.id.ivTweetImage)
+        public ImageView ivTweetImage;
+        @BindView(R.id.tvUserName)
+        public TextView tvUserName;
+        @BindView(R.id.ivVerified)
+        public ImageView ivVerified;
+        @BindView(R.id.tvHandle)
+        public TextView tvHandle;
+        @BindView(R.id.tvDot)
+        public TextView tvDot;
+        @BindView(R.id.tvTime)
+        public TextView tvTime;
+        @BindView(R.id.tvBody)
+        public TextView tvBody;
+        @BindView(R.id.ivMedia)
+        public ImageView ivMedia;
+        @BindView(R.id.ivReply)
+        public ImageView ivReply;
+        @BindView(R.id.ivRetweet)
+        public ImageView ivRetweet;
+        @BindView(R.id.tvRetweeted)
+        public TextView tvRetweeted;
+        @BindView(R.id.ivFavorite)
+        public ImageView ivFavorite;
+        @BindView(R.id.tvFavorited)
+        public TextView tvFavorited;
 
 
-      //@BindView(R.id.ivMedia2) public FensterVideoView textureView;
-       // @BindView(R.id.ivMedia3) public SimpleMediaFensterPlayerController fullSreenMediaPlayerController;
+        //@BindView(R.id.ivMedia2) public FensterVideoView textureView;
+        // @BindView(R.id.ivMedia3) public SimpleMediaFensterPlayerController fullSreenMediaPlayerController;
 
 
         public ImageView getIvMedia() {
@@ -389,12 +471,18 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.fullSreenMediaPlayerController = mediaFensterPlayerController;
         }*/
     }
+
     public static class ViewHolderNoImage extends RecyclerView.ViewHolder {
-        @BindView(R.id.ivTweetImage) public ImageView ivTweetImage;
-        @BindView(R.id.tvUserName) public TextView tvUserName;
-        @BindView(R.id.ivVerified) public ImageView ivVerified;
-        @BindView(R.id.tvHandle) public TextView tvHandle;
-        @BindView(R.id.tvBody) public TextView tvBody;
+        @BindView(R.id.ivTweetImage)
+        public ImageView ivTweetImage;
+        @BindView(R.id.tvUserName)
+        public TextView tvUserName;
+        @BindView(R.id.ivVerified)
+        public ImageView ivVerified;
+        @BindView(R.id.tvHandle)
+        public TextView tvHandle;
+        @BindView(R.id.tvBody)
+        public TextView tvBody;
 
 
         //@BindView(R.id.ivMedia2) public FensterVideoView textureView;

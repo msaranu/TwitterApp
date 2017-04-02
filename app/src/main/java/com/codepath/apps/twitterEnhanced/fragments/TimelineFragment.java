@@ -3,9 +3,13 @@ package com.codepath.apps.twitterEnhanced.fragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,22 +18,36 @@ import android.widget.Toast;
 import com.codepath.apps.twitterEnhanced.R;
 import com.codepath.apps.twitterEnhanced.activities.TimelineActivity;
 import com.codepath.apps.twitterEnhanced.adapters.TweetsArrayAdapter;
+import com.codepath.apps.twitterEnhanced.applications.TwitterApplication;
+import com.codepath.apps.twitterEnhanced.clients.TwitterClient;
 import com.codepath.apps.twitterEnhanced.decorators.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.twitterEnhanced.decorators.ItemClickSupport;
 import com.codepath.apps.twitterEnhanced.models.Tweet;
+import com.codepath.apps.twitterEnhanced.models.User;
 import com.codepath.apps.twitterEnhanced.network.NetworkUtil;
 import com.codepath.apps.twitterEnhanced.services.TweetOfflineService;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cz.msebera.android.httpclient.Header;
+
+import static com.codepath.apps.twitterEnhanced.properties.properties.OFFLINE_PROFILE_URL;
+import static com.codepath.apps.twitterEnhanced.properties.properties.OFFLINE_SCREEN_NAME;
+import static com.codepath.apps.twitterEnhanced.properties.properties.OFFLINE__NAME;
 
 /**
  * Created by Saranu on 3/29/17.
  */
 
-public abstract class TimelineFragment extends android.support.v4.app.Fragment {
+public abstract class TimelineFragment extends android.support.v4.app.Fragment
+        implements TweetDetailDialogFragment.ComposeTweetDialogListener,
+        ComposeTweetDialogFragment.ComposeTweetModalDialogListener {
 
     ArrayList<Tweet> tweets;
     TweetsArrayAdapter adapter;
@@ -43,10 +61,16 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment {
   //  FloatingActionButton fabComposeTweet;
     Tweet composeTweet;
     long cursorID = -1;
+    TwitterClient client;
+    @BindView(R.id.fabComposeTweet)
+    FloatingActionButton fabComposeTweet;
+
 
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        client = TwitterApplication.getRestClient();
+
 
     }
 
@@ -55,8 +79,9 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment {
         // Defines the xml file for the fragment
         View v = inflater.inflate(R.layout.fragment_timeline, parent, false);
         ButterKnife.bind(this,v);
+       setFloatingAction();
 
-        //start Bind date to adapter
+       //start Bind date to adapter
         tweets = new ArrayList<>();
         adapter = new TweetsArrayAdapter(getActivity(), tweets);
         rvTweets.setAdapter(adapter);
@@ -154,15 +179,6 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment {
     }
 
 
-    public void onReplyTweet(Bundle bundle) {
-        android.support.v4.app.FragmentManager fm = getFragmentManager();
-        TweetDetailDialogFragment fdf = TweetDetailDialogFragment.newInstance();
-        fdf.setArguments(bundle);
-        fdf.setTargetFragment(TimelineFragment.this,300);
-       // fdf.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme);
-        fdf.show(fm, "FRAGMENT_MODAL_COMPOSE");
-    }
-
 
     private void bindDataToAdapter(TimelineActivity timelineActivity) {
         // fragFilterSettings = new FilterSettings();
@@ -176,16 +192,123 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment {
     }
 
 
+    public void onReplyTweet(Bundle bundle) {
 
-
-  /*  public void onReplyTweet(Bundle bundle) {
-        FragmentManager fm = getSupportFragmentManager();
+        FragmentManager fm = getFragmentManager();
         TweetDetailDialogFragment fdf = TweetDetailDialogFragment.newInstance();
         fdf.setArguments(bundle);
+        fdf.setTargetFragment(TimelineFragment.this, 300);
         fdf.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme);
         fdf.show(fm, "FRAGMENT_MODAL_COMPOSE");
-    }*/
+    }
 
+
+    @Override
+    public void onFinishComposeTweetDialog(String tweetText, Tweet tweet) {
+        composeTweet( tweetText, tweet);
+    }
+
+
+    @Override
+    public void onFinishComposeModalTweetDialog(String tweetText, Tweet tweet) {
+        composeTweet( tweetText,  tweet);
+    }
+
+    public void composeTweet(String tweetText, Tweet tweet){
+        composeTweet = constructOfflineTweetUser();
+        composeTweet.setText(tweetText);
+        client = TwitterApplication.getRestClient();
+
+
+        client.postStatusUpdate(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d("DEBUG", response.toString());
+                if (composeTweet.getId() <= 0) {
+                    composeTweet.setId(-1l);
+                    tweets.add(0, composeTweet);
+                    adapter.notifyDataSetChanged();
+                    rvTweets.scrollToPosition(0);
+                    swipeContainer.setRefreshing(false);
+                }
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                Log.d("DEBUG", response.toString());
+                if (composeTweet.getId() <= 0) {
+                    tweets.add(0, composeTweet);
+                    adapter.notifyDataSetChanged();
+                    rvTweets.scrollToPosition(0);
+                }
+
+
+            }
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
+                    Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
+                            Toast.LENGTH_LONG).show();
+                } else Toast.makeText(getContext(), "TOO MANY REQUESTS 2 ??",
+                        Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+                if (errorResponse.toString().contains("Too Many Requests")) {
+                    Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
+                            Toast.LENGTH_LONG).show();
+                } else Toast.makeText(getContext(), "TOO MANY REQUESTS 3??",
+                        Toast.LENGTH_LONG).show();
+
+            }
+
+        }, tweetText, tweet.getId());
+
+    }
+
+    public  Tweet constructOfflineTweetUser() {
+        Tweet tweetOffline = new Tweet();
+        tweetOffline.setRetweetCount(0l);
+        tweetOffline.setFavoriteCount(0l);
+        User u = new User();
+        u.setScreenName(OFFLINE_SCREEN_NAME);
+        u.setName(OFFLINE__NAME);
+        u.setProfileImageUrl(OFFLINE_PROFILE_URL);
+        u.setVerified(false);
+        tweetOffline.setUser(u);
+        return tweetOffline;
+    }
+
+
+    private void setFloatingAction() {
+
+        fabComposeTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("TWEET_OBJ", new Tweet());
+                onComposeTweet(bundle);
+
+            }
+        });
+    }
+
+    public void onComposeTweet(Bundle bundle) {
+        FragmentManager fm = getFragmentManager();
+        ComposeTweetDialogFragment fdf = ComposeTweetDialogFragment.newInstance();
+        fdf.setArguments(bundle);
+        fdf.setTargetFragment(TimelineFragment.this, 300);
+        fdf.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme);
+        fdf.show(fm, "FRAGMENT_MODAL_COMPOSE");
+
+    }
 
 
 }
+

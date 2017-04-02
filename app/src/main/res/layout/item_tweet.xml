@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingRight="5dp">
 
     <View
         android:layout_width="match_parent"
@@ -120,12 +121,12 @@
 
 
     <ImageView
-        android:layout_width="@dimen/tiny_images_dimen"
-        android:layout_height="@dimen/tiny_images_dimen"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_below="@+id/ivMedia"
         android:layout_alignLeft="@id/ivMedia"
         android:layout_alignStart="@id/ivMedia"
-        app:srcCompat="@drawable/reply_grey"
+        app:srcCompat="@drawable/ic_vector_reply"
         android:layout_alignBaseline="@id/ivMedia"
         android:layout_marginRight="30dp"
         android:id="@+id/ivReply" />
@@ -154,13 +155,13 @@
 
 
     <ImageView
-        android:layout_width="@dimen/tiny_images_dimen"
-        android:layout_height="@dimen/tiny_images_dimen"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:layout_below="@id/ivMedia"
         android:layout_toRightOf="@id/tvRetweeted"
         android:layout_toEndOf="@id/tvRetweeted"
         app:srcCompat="@drawable/ic_vector_heart"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         android:layout_marginRight="10dp"
         android:id="@+id/ivFavorite" />
 

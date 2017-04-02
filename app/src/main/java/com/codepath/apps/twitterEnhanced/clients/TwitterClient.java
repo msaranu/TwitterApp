@@ -49,6 +49,7 @@ public class TwitterClient extends OAuthBaseClient {
             params.put("since_id", 1);
         }
         params.put("count", 15);
+        params.put("exclude_replies", false);
         client.get(apiUrl, params, handler);
 
     }
@@ -112,10 +113,17 @@ public class TwitterClient extends OAuthBaseClient {
 
     }
 
-    public void getRetweet(AsyncHttpResponseHandler handler, String id) {
-        String apiUrl = getApiUrl("statuses/retweet/" + id + ".json");
+    public void setRetweet(AsyncHttpResponseHandler handler, long id, boolean retweeted) {
+        String apiUrl ;
+        if (retweeted) {
+            apiUrl = getApiUrl("statuses/unretweet");
+        } else {
+            apiUrl = getApiUrl("statuses/retweet");
+
+        }
         RequestParams params = new RequestParams();
-        client.get(apiUrl, params, handler);
+        params.put("id", id);
+        client.post(apiUrl, params, handler);
     }
 
 
@@ -212,7 +220,7 @@ public class TwitterClient extends OAuthBaseClient {
         params.put("text", message);
         params.put("count", 15);
         params.put("screen_name", screenName);
-        client.get(apiUrl, params, handler);
+        client.post(apiUrl, params, handler);
     }
 
     public void getDirectMessages(AsyncHttpResponseHandler handler) {
