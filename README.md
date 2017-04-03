@@ -42,10 +42,7 @@ The following **additional** features are implemented:
 
 * [X] List anything else that you can get done to improve the app functionality!
   * [X] Configured toolbar at the bottom with a linear layout config.
-  * [X] The user that wrote the original tweet is automatically "@" replied in compose
-  * [X] The user that wrote the original tweet is automatically "@" replied in compose
-
-
+  
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
