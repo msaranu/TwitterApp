@@ -26,7 +26,6 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tbTwitter"
                 android:layout_width="match_parent"

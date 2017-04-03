@@ -74,9 +74,13 @@ public class UserTimelineMediaFragment extends UserTimelineFragment{
                     if (tweetList == null || tweetList.isEmpty() || tweetList.size() == 0) {
                         Toast.makeText(getContext(), "NO TWEET MENTIONS",
                                 Toast.LENGTH_LONG).show();
+
                     } else {
                         tweetofflineservice.deleteTweetsoffline();
                         tweetofflineservice.saveTweetsOffline(tweetList);
+                        for(Tweet t: tweetList){
+                            t.setMediaOnly(true);
+                        }
                         tweets.addAll(tweetList);
                         adapter.notifyDataSetChanged();
 

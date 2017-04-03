@@ -46,7 +46,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     TwitterClient client;
     Tweet tweet;
 
-    private final int IMAGE = 0, NO_IMAGE = 1,  DIRECT_MESSAGE=2;
+    private final int IMAGE = 0, NO_IMAGE = 1, MEDIA_ONLY = 2;
 
     // Easy access to the context object in the recyclerview
     private Context getContext() {
@@ -70,8 +70,11 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     //Returns the view type of the item at position for the purposes of view recycling.
     @Override
     public int getItemViewType(int position) {
-        if (mTweets.get(position).getId() == 0 || mTweets.get(position).getUser() ==null) {
+        if (mTweets.get(position).getId() == 0 || mTweets.get(position).getUser() == null) {
             return NO_IMAGE;
+        }
+        if (mTweets.get(position).isMediaOnly()) {
+            return MEDIA_ONLY;
         } else
             return IMAGE;
     }
@@ -107,6 +110,10 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 tweetView = inflater.inflate(R.layout.item_user, parent, false);
                 viewHolder = new ViewHolderNoImage(tweetView);
                 break;
+            case MEDIA_ONLY:
+                tweetView = inflater.inflate(R.layout.item_media, parent, false);
+                viewHolder = new ViewHolderMediaOnly(tweetView);
+                break;
 
             default:
                 return null;
@@ -122,7 +129,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-         tweet = mTweets.get(position);
+        tweet = mTweets.get(position);
 
         switch (viewHolder.getItemViewType()) {
             case IMAGE:
@@ -133,8 +140,27 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 TweetsArrayAdapter.ViewHolderNoImage vhImage = (TweetsArrayAdapter.ViewHolderNoImage) viewHolder;
                 configureViewHolderNoImage(vhImage, tweet);
                 break;
+            case MEDIA_ONLY:
+                TweetsArrayAdapter.ViewHolderMediaOnly vhMediaOnly = (TweetsArrayAdapter.ViewHolderMediaOnly) viewHolder;
+                configureViewHolderMediaOnly(vhMediaOnly, tweet);
+                break;
             default:
                 break;
+        }
+    }
+
+
+    private void configureViewHolderMediaOnly(final ViewHolderMediaOnly vh, final Tweet tweet) {
+
+
+        ImageView ivMedia = vh.ivMedia;
+        ivMedia.setImageResource(0);
+        if (tweet.getEntities() != null && tweet.getEntities().getMedia()
+                != null) {
+            String mUrl = tweet.getEntities().getMedia().get(0).getMediaUrl();
+            Glide.with(mContext).load(mUrl).placeholder(R.drawable.ic_launcher).
+                    error(R.drawable.ic_launcher).into(ivMedia);
+
         }
     }
 
@@ -189,16 +215,18 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             vh.tvRetweeted.setText(Long.toString(tweet.getRetweetCount()));
             vh.tvFavorited.setText(Long.toString(tweet.getFavoriteCount()));
+
         } else {
             vh.tvRetweeted.setText("0");
             vh.tvFavorited.setText("0");
+
         }
 
-        if(tweet.retweeted){
+        if (tweet.retweeted != null && tweet.retweeted) {
             vh.ivRetweet.setImageResource(R.drawable.ic_vector_retweet_green);
         }
 
-        if(tweet.favorited){
+        if (tweet.favorited != null && tweet.favorited) {
             vh.ivFavorite.setImageResource(R.drawable.ic_vector_heart_red);
         }
 
@@ -208,14 +236,14 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 client.setFavoriteIcon(new JsonHttpResponseHandler() {
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        if(tweet.favorited) {
+                        if (tweet.favorited) {
                             vh.ivFavorite.setImageResource(R.drawable.ic_vector_heart);
-                        }else{
+                        } else {
                             vh.ivFavorite.setImageResource(R.drawable.ic_vector_heart_red);
                         }
                         tweet.favorited = !tweet.favorited;
                         try {
-                            String favoriteCount= response.getString("favorite_count");
+                            String favoriteCount = response.getString("favorite_count");
                             vh.tvFavorited.setText(favoriteCount);
                             tweet.setFavoriteCount(Long.parseLong(favoriteCount));
                         } catch (JSONException e) {
@@ -234,7 +262,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 Toast.LENGTH_LONG).show();
                     }
 
-                },tweet.getId(), tweet.favorited);
+                }, tweet.getId(), tweet.favorited);
 
             }
         });
@@ -246,14 +274,14 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 client.setRetweet(new JsonHttpResponseHandler() {
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        if(tweet.retweeted) {
+                        if (tweet.retweeted) {
                             vh.ivRetweet.setImageResource(R.drawable.ic_retweet_vector);
-                        }else{
+                        } else {
                             vh.ivRetweet.setImageResource(R.drawable.ic_vector_retweet_green);
                         }
                         tweet.retweeted = !tweet.retweeted;
                         try {
-                            String reTweetCount= response.getString("retweet_count");
+                            String reTweetCount = response.getString("retweet_count");
                             vh.tvRetweeted.setText(reTweetCount);
                             tweet.setRetweetCount(Long.parseLong(reTweetCount));
                         } catch (JSONException e) {
@@ -272,10 +300,10 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                 Toast.LENGTH_LONG).show();
                     }
 
-                    public void onFailure(int statusCode, Header[] header, String s1, Throwable t1){
+                    public void onFailure(int statusCode, Header[] header, String s1, Throwable t1) {
                         Log.d("DEBUG", s1.toString());
                     }
-                },tweet.getId(), tweet.retweeted);
+                }, tweet.getId(), tweet.retweeted);
 
             }
         });
@@ -284,7 +312,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private void configureViewHolderNoImage(ViewHolderNoImage vh, Tweet tweet) {
 
-        if(tweet.getUser() != null ) {
+        if (tweet.getUser() != null) {
             final ImageView ivImage = vh.ivTweetImage;
             ivImage.setImageResource(0);
             if (tweet.getUser() != null && tweet.getUser().getProfileImageUrl() != null) {
@@ -317,11 +345,11 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }).into(vh.tvBody);
-        }else{
+        } else {
             final ImageView ivImage = vh.ivTweetImage;
             Sender s = tweet.getDirectMessage().getSender();
             ivImage.setImageResource(0);
-            if (s.getProfileImageUrl() != null ) {
+            if (s.getProfileImageUrl() != null) {
                 String url = s.getProfileImageUrl();
                 Glide.with(mContext).load(url).placeholder(R.drawable.placeholder).
                         error(R.drawable.ic_launcher).into(ivImage);
@@ -343,9 +371,9 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     + DateUtil.getRelativeTimeAgo(tweet.getDirectMessage().getCreatedAt());
             vh.tvBody.setText(textMessage);
             vh.tvHandle.setText('@' + tweet.getDirectMessage().getSenderScreenName());
-            if(tweet.getDirectMessage().getSenderScreenName().toUpperCase().equals("MALLESWARI_S")){
+            if (tweet.getDirectMessage().getSenderScreenName().toUpperCase().equals("MALLESWARI_S")) {
                 vh.tvBody.setTextColor(Color.BLUE);
-            }else{
+            } else {
                 vh.tvBody.setTextColor(Color.RED);
 
             }
@@ -583,4 +611,24 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     }
+
+    public static class ViewHolderMediaOnly extends RecyclerView.ViewHolder {
+        @BindView(R.id.ivMedia)
+        public ImageView ivMedia;
+
+
+        public ViewHolderMediaOnly(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+
+        public ImageView getIvMedia() {
+            return ivMedia;
+        }
+
+        public void setIvMedia(ImageView ivVerified) {
+            this.ivMedia = ivMedia;
+        }
+    }
+
 }

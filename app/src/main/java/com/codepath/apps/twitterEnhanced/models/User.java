@@ -63,6 +63,7 @@ public class User extends BaseModel implements Parcelable{
 
     public long cursorID =-1;
 
+
     public long getCursorID() {
         return cursorID;
     }

@@ -36,8 +36,9 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:src="@drawable/compose_new"
-        app:backgroundTint="@color/blue"
+        app:backgroundTint="@color/twitterBlue"
         app:borderWidth="0dp"
+        android:layout_marginBottom="30dp"
         app:layout_anchor="@id/rvTweets"
         app:layout_anchorGravity="bottom|right" />
 

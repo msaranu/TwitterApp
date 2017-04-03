@@ -80,6 +80,18 @@ public class Tweet extends BaseModel implements Parcelable {
         this.directMessage = directMessage;
     }
 
+
+    public boolean isMediaOnly() {
+        return mediaOnly;
+    }
+
+    public void setMediaOnly(boolean mediaOnly) {
+        this.mediaOnly = mediaOnly;
+    }
+
+    public boolean mediaOnly;
+
+
     public Tweet(){
         super();
     }

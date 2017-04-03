@@ -6,27 +6,20 @@
 
     <ImageView
         android:id="@+id/ivToolbarUserProfile"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:onClick="onUserProfileView"
-        android:layout_marginRight="20dp"
-        app:srcCompat="@drawable/ic_person_outline_black_24dp" />
-
-    <TextView
-        android:id="@+id/ivToolbarUserProfileText"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginRight="20dp"
-        android:layout_below="@id/ivToolbarUserProfile"
-        android:text="Me"
-        android:layout_marginLeft="5dp"
-        android:textSize="10sp"/>
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        app:srcCompat="@drawable/ic_user_profile" />
 
     <ImageView
         android:id="@+id/ivToolbarExplore"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginRight="20dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginRight="30dp"
         android:layout_toRightOf="@id/ivToolbarUserProfile"
         android:onClick="onUserExploreView"
         app:srcCompat="@drawable/ic_vector_explore" />
@@ -36,7 +29,7 @@
         android:id="@+id/ivToolbarMessages"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginRight="30dp"
         android:layout_toRightOf="@id/ivToolbarExplore"
         android:onClick="onUserMessageView"
         app:srcCompat="@drawable/ic_vector_messages" />
@@ -44,16 +37,19 @@
 
     <ImageView
         android:id="@+id/ivToolbarNotifications"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="30dp"
         android:layout_toRightOf="@id/ivToolbarMessages"
         app:srcCompat="@drawable/ic_twitterbell" />
 
 
     <ImageView
         android:id="@+id/ivSendDM"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="3dp"
         android:onClick="onUserMessageSend"
         android:layout_toRightOf="@id/ivToolbarNotifications"
         android:layout_marginRight="200dp"
