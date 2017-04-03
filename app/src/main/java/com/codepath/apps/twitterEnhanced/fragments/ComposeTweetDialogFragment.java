@@ -39,11 +39,16 @@ import static com.codepath.apps.twitterEnhanced.properties.properties.MAX_TEXT_L
 
 public class ComposeTweetDialogFragment extends DialogFragment implements MyAlertDialogFragment.MyAlertDialogFragmentListener {
 
-    @BindView(R.id.tbTwitter) public Toolbar tbTwitter;
-    @BindView(R.id.etReplyTweet) public EditText etReplyTweet;
-    @BindView(R.id.tvCharsLeft) public TextView tvCharsLeft;
-    @BindView(R.id.btTweetReply) public Button btTweetReply;
-    @BindView(R.id.rlReply) public RelativeLayout rlReply;
+    @BindView(R.id.tbTwitter)
+    public Toolbar tbTwitter;
+    @BindView(R.id.etReplyTweet)
+    public EditText etReplyTweet;
+    @BindView(R.id.tvCharsLeft)
+    public TextView tvCharsLeft;
+    @BindView(R.id.btTweetReply)
+    public Button btTweetReply;
+    @BindView(R.id.rlReply)
+    public RelativeLayout rlReply;
 
     Tweet tweet;
 
@@ -79,7 +84,7 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
         //     getDialog().setTitle("Filter Settings");
         View fView = inflater.inflate(R.layout.fragment_compose_new_tweet, container);
         Bundle bundle = this.getArguments();
-        ButterKnife.bind(this,fView);
+        ButterKnife.bind(this, fView);
         populateViewsfromObject(bundle);
 
         // Set an OnMenuItemClickListener to handle menu item clicks
@@ -87,15 +92,15 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
                 new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId() == R.id.action_close){
-                           // getDialog().dismiss();
-                            if(!etReplyTweet.getText().toString().isEmpty() ) {
+                        if (item.getItemId() == R.id.action_close) {
+                            // getDialog().dismiss();
+                            if (!etReplyTweet.getText().toString().isEmpty()) {
                                 FragmentManager fm = getFragmentManager();
                                 MyAlertDialogFragment fdf = MyAlertDialogFragment.newInstance();
                                 fdf.setTargetFragment(ComposeTweetDialogFragment.this, 300);
                                 fdf.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppDialogTheme);
                                 fdf.show(fm, "FRAGMENT_MODAL_ALERT");
-                            }else{
+                            } else {
                                 dismiss();
                             }
 
@@ -136,10 +141,10 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
 
     private void populateViewsfromObject(Bundle bundle) {
 
-        if (bundle != null ) {
+        if (bundle != null) {
             tweet = bundle.getParcelable("TWEET_OBJ");
 
-            if(tweet.getText()==null) {
+            if (tweet.getText() == null) {
                 List draftListfromDB = TweetOfflineService.retrieveTweetDraft();
                 if (draftListfromDB != null && draftListfromDB.size() != 0) {
                     String draftString = ((Draft) (draftListfromDB.get(0))).getDraftText().toString();
@@ -155,12 +160,10 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
                 }
-
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 }
-
                 @Override
                 public void afterTextChanged(Editable s) {
                     int charsRemaining = MAX_TEXT_LENGTH - s.length();
@@ -176,13 +179,14 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
 
         }
     }
+
     public interface ComposeTweetModalDialogListener {
         void onFinishComposeModalTweetDialog(String tweetText, Tweet tweet);
     }
 
 
     private void populateObjectfromViews() {
-         ComposeTweetModalDialogListener  listener =
+        ComposeTweetModalDialogListener listener =
                 (ComposeTweetModalDialogListener) getTargetFragment();
         listener.onFinishComposeModalTweetDialog(etReplyTweet.getText().toString(), tweet);
         dismiss();
@@ -190,14 +194,14 @@ public class ComposeTweetDialogFragment extends DialogFragment implements MyAler
     }
 
     @Override
-    public void onFinishAlertDialog( boolean dismiss) {
+    public void onFinishAlertDialog(boolean dismiss) {
 
-        if(dismiss){
+        if (dismiss) {
             TweetOfflineService.deleteTweetDraft();
             dismiss();
-        }else{
+        } else {
             saveDrafttoDB();
-             dismiss();
+            dismiss();
         }
     }
 

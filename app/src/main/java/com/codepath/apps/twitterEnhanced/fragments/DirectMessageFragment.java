@@ -98,7 +98,8 @@ public class DirectMessageFragment extends TimelineFragment {
                     if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                         Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                                 Toast.LENGTH_LONG).show();
-                    } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
+                    } else {}
+                        Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
                             Toast.LENGTH_LONG).show();
                 }
 

@@ -66,8 +66,7 @@ public class HomeTimelineFragment extends TimelineFragment {
                 Log.d("DEBUG", response.toString());
                 GsonBuilder gsonBuilder = new GsonBuilder();
                 gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-                // register type adapters here, specify field naming policy, etc.
-                Gson gson = gsonBuilder.create();              //  Tweet[] tarray = gson.fromJson(response.toString(),Tweet[].class);
+                Gson gson = gsonBuilder.create();
                 List<Tweet> tweetList = gson.fromJson(response.toString(), new TypeToken<List<Tweet>>() {
                 }.getType());
                 if (tweetList == null || tweetList.isEmpty() || tweetList.size() == 0) {
@@ -80,7 +79,6 @@ public class HomeTimelineFragment extends TimelineFragment {
                     adapter.notifyDataSetChanged();
                     pd.dismiss();
 
-
                 }
             }
 
@@ -91,7 +89,8 @@ public class HomeTimelineFragment extends TimelineFragment {
                 if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                     Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
-                } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
+                } else
+                    Toast.makeText(getContext(), "TOO MANY REQUESTS",
                         Toast.LENGTH_LONG).show();
                 pd.dismiss();
             }
@@ -103,7 +102,8 @@ public class HomeTimelineFragment extends TimelineFragment {
                 if (errorResponse.toString().contains("Too Many Requests")) {
                     Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
-                } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
+                } else
+                    Toast.makeText(getContext(), "TOO MANY REQUESTS",
                         Toast.LENGTH_LONG).show();
                 pd.dismiss();
 

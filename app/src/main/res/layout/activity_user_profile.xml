@@ -40,10 +40,10 @@
                     android:gravity="center_horizontal">
 
                     <ImageView
+                        android:id="@+id/ivTweetImage"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        app:srcCompat="@drawable/twitter"
-                        android:id="@+id/ivTweetImage" />
+                        app:srcCompat="@drawable/twitter" />
 
                 </LinearLayout>
 
@@ -66,8 +66,7 @@
         <FrameLayout
             android:id="@+id/fragmentHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-         />
+            android:layout_height="wrap_content" />
 
 
         <RelativeLayout

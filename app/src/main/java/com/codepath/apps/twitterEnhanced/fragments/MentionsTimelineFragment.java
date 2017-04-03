@@ -18,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -73,26 +72,14 @@ public class MentionsTimelineFragment extends TimelineFragment {
                 }
             }
 
-
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
                 if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                     Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
-                } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
+                } else Toast.makeText(getContext(), "TOO MANY REQUESTS",
                         Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-                if (errorResponse.toString().contains("Too Many Requests")) {
-                    Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
-                            Toast.LENGTH_LONG).show();
-                } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
-                        Toast.LENGTH_LONG).show();
-
             }
 
         }, id, scroll);

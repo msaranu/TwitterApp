@@ -72,7 +72,7 @@ public class UserTimlineLikesFragment extends UserTimelineFragment {
                 List<Tweet> tweetList = gson.fromJson(response.toString(), new TypeToken<List<Tweet>>() {
                 }.getType());
                 if (tweetList == null || tweetList.isEmpty() || tweetList.size() == 0) {
-                    Toast.makeText(getContext(), "NO TWEET MENTIONS",
+                    Toast.makeText(getContext(), "NO TWEET LIKES",
                             Toast.LENGTH_LONG).show();
                 } else {
                     tweetofflineservice.deleteTweetsoffline();
@@ -90,7 +90,7 @@ public class UserTimlineLikesFragment extends UserTimelineFragment {
                 if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                     Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
-                } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
+                } else Toast.makeText(getContext(), "TOO MANY REQUESTS",
                         Toast.LENGTH_LONG).show();
             }
 

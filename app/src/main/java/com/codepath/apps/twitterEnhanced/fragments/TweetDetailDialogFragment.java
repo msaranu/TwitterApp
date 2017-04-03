@@ -5,7 +5,6 @@ package com.codepath.apps.twitterEnhanced.fragments;
  */
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -45,39 +43,68 @@ import cz.msebera.android.httpclient.Header;
 
 public class TweetDetailDialogFragment extends DialogFragment {
 
-    @BindView(R.id.tbTwitter) public Toolbar tbTwitter;
-    @BindView(R.id.ivTweetImage)public ImageView ivTweetImage;
-    @BindView(R.id.tvUserName) public TextView tvUserName;
-    @BindView(R.id.ivVerified)public ImageView ivVerfied;
-    @BindView(R.id.tvHandle) public TextView tvHandle;
-    @BindView(R.id.tvBody) public TextView tvBody;
-    @BindView(R.id.ivMedia)public ImageView ivMedia;
-    @BindView(R.id.tvTimeStamp)public TextView tvTimeStamp;
-    @BindView(R.id.seperatorview_1)public View seperatorview_1;
-    @BindView(R.id.seperatorview_2)public View seperatorview_2;
-    @BindView(R.id.seperatorview_3)public View seperatorview_3;
-    @BindView(R.id.seperatorview_4)public View seperatorview_4;
+    @BindView(R.id.tbTwitter)
+    public Toolbar tbTwitter;
+    @BindView(R.id.ivTweetImage)
+    public ImageView ivTweetImage;
+    @BindView(R.id.tvUserName)
+    public TextView tvUserName;
+    @BindView(R.id.ivVerified)
+    public ImageView ivVerfied;
+    @BindView(R.id.tvHandle)
+    public TextView tvHandle;
+    @BindView(R.id.tvBody)
+    public TextView tvBody;
+    @BindView(R.id.ivMedia)
+    public ImageView ivMedia;
+    @BindView(R.id.tvTimeStamp)
+    public TextView tvTimeStamp;
+    @BindView(R.id.seperatorview_1)
+    public View seperatorview_1;
+    @BindView(R.id.seperatorview_2)
+    public View seperatorview_2;
+    @BindView(R.id.seperatorview_3)
+    public View seperatorview_3;
+    @BindView(R.id.seperatorview_4)
+    public View seperatorview_4;
 
-    @BindView(R.id.tvRetweetedNo) public TextView tvRetweetedNo;
-    @BindView(R.id.tvRetweeted) public TextView tvRetweeted;
-    @BindView(R.id.tvLikesNo) public TextView tvLikesNo;
-    @BindView(R.id.tvFavorited) public TextView tvFavorited;
+    @BindView(R.id.tvRetweetedNo)
+    public TextView tvRetweetedNo;
+    @BindView(R.id.tvRetweeted)
+    public TextView tvRetweeted;
+    @BindView(R.id.tvLikesNo)
+    public TextView tvLikesNo;
+    @BindView(R.id.tvFavorited)
+    public TextView tvFavorited;
 
-    @BindView(R.id.ivReply)public ImageView ivReply;
-    @BindView(R.id.ivRetweet)public ImageView ivRetweet;
-    @BindView(R.id.ivFavorite)public ImageView ivFavorite;
+    @BindView(R.id.ivReply)
+    public ImageView ivReply;
+    @BindView(R.id.ivRetweet)
+    public ImageView ivRetweet;
+    @BindView(R.id.ivFavorite)
+    public ImageView ivFavorite;
 
-    @BindView(R.id.etReplyTweet) public EditText etReplyTweet;
-    @BindView(R.id.tvCharsLeft) public TextView tvCharsLeft;
-    @BindView(R.id.rlReply) public RelativeLayout rlReply;
-    @BindView(R.id.btTweetReply) public Button btTweetReply;
+    @BindView(R.id.etReplyTweet)
+    public EditText etReplyTweet;
+    @BindView(R.id.tvCharsLeft)
+    public TextView tvCharsLeft;
+    @BindView(R.id.rlReply)
+    public RelativeLayout rlReply;
+    @BindView(R.id.btTweetReply)
+    public Button btTweetReply;
 
-    @BindView(R.id.rlTweetResponse) public RelativeLayout rlTweetResponse;
-    @BindView(R.id.ivResponseTweetImage)public ImageView ivResponseTweetImage;
-    @BindView(R.id.tvResponseUserName) public TextView tvResponseUserName;
-    @BindView(R.id.ivResponseVerified)public ImageView ivResponseVerified;
-    @BindView(R.id.tvResponseHandle) public TextView tvResponseHandle;
-    @BindView(R.id.tvResponseBody) public TextView tvResponseBody;
+    @BindView(R.id.rlTweetResponse)
+    public RelativeLayout rlTweetResponse;
+    @BindView(R.id.ivResponseTweetImage)
+    public ImageView ivResponseTweetImage;
+    @BindView(R.id.tvResponseUserName)
+    public TextView tvResponseUserName;
+    @BindView(R.id.ivResponseVerified)
+    public ImageView ivResponseVerified;
+    @BindView(R.id.tvResponseHandle)
+    public TextView tvResponseHandle;
+    @BindView(R.id.tvResponseBody)
+    public TextView tvResponseBody;
 
 
     Tweet tweet;
@@ -91,7 +118,7 @@ public class TweetDetailDialogFragment extends DialogFragment {
     }
 
     public interface ComposeTweetDialogListener {
-           void onFinishComposeTweetDialog(String tweetText, Tweet tweet);
+        void onFinishComposeTweetDialog(String tweetText, Tweet tweet);
     }
 
     public static TweetDetailDialogFragment newInstance() {
@@ -117,10 +144,10 @@ public class TweetDetailDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-   //     getDialog().setTitle("Filter Settings");
+        //     getDialog().setTitle("Filter Settings");
         View fView = inflater.inflate(R.layout.fragment_tweet_detail, container);
         Bundle bundle = this.getArguments();
-        ButterKnife.bind(this,fView);
+        ButterKnife.bind(this, fView);
         populateViewsfromObject(bundle);
         client = TwitterApplication.getRestClient();
 
@@ -129,7 +156,7 @@ public class TweetDetailDialogFragment extends DialogFragment {
                 new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId() == R.id.action_close){
+                        if (item.getItemId() == R.id.action_close) {
                             getDialog().dismiss();
                         }
                         // Handle the menu item
@@ -139,7 +166,7 @@ public class TweetDetailDialogFragment extends DialogFragment {
 
         // Inflate a menu to be displayed in the toolbar
         tbTwitter.inflateMenu(R.menu.menu_twitter_fragment);
-         return fView;
+        return fView;
     }
 
 
@@ -166,9 +193,9 @@ public class TweetDetailDialogFragment extends DialogFragment {
 
     private void populateViewsfromObject(Bundle bundle) {
 
-        if (bundle != null ) {
+        if (bundle != null) {
             tweet = bundle.getParcelable("TWEET_OBJ");
-            if (tweet.getUser().getProfileImageUrl() !=null) {
+            if (tweet.getUser().getProfileImageUrl() != null) {
                 String url = tweet.getUser().getProfileImageUrl();
                 Glide.with(getContext()).load(url).placeholder(R.drawable.ic_launcher).
                         error(R.drawable.ic_launcher).into(ivTweetImage);
@@ -179,8 +206,8 @@ public class TweetDetailDialogFragment extends DialogFragment {
             tvHandle.setText(tweet.getUser().getScreenName());
             tvTimeStamp.setText(tweet.getCreatedAt());//TODO: Convert to time
             ivMedia.setImageResource(0);
-            if(tweet.getEntities() != null && tweet.getEntities().getMedia()
-                    !=null ){
+            if (tweet.getEntities() != null && tweet.getEntities().getMedia()
+                    != null) {
                 String mUrl = tweet.getEntities().getMedia().get(0).getMediaUrl();
                 Glide.with(getContext()).load(mUrl).placeholder(R.drawable.ic_launcher).
                         error(R.drawable.ic_launcher).into(ivMedia);
@@ -205,7 +232,7 @@ public class TweetDetailDialogFragment extends DialogFragment {
                     int maxLength = 142;
                     int charsRemaining = maxLength - s.length();
                     tvCharsLeft.setText(Integer.toString(charsRemaining));
-                    if(charsRemaining <0 ){
+                    if (charsRemaining < 0) {
                         tvCharsLeft.setEnabled(false);
                         tvCharsLeft.setTextColor(Color.RED);
                     }
@@ -216,7 +243,7 @@ public class TweetDetailDialogFragment extends DialogFragment {
             etReplyTweet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                                                       @Override
                                                       public void onFocusChange(View v, boolean hasFocus) {
-                                                          if(hasFocus){
+                                                          if (hasFocus) {
                                                               rlReply.setVisibility(View.VISIBLE);
                                                               etReplyTweet.setTextColor(Color.BLACK);
                                                               etReplyTweet.setTextSize(14);
@@ -232,11 +259,11 @@ public class TweetDetailDialogFragment extends DialogFragment {
             tvRetweeted.setText(Long.toString(tweet.getRetweetCount()));
             tvFavorited.setText(Long.toString(tweet.getFavoriteCount()));
 
-            if(tweet.retweeted){
+            if (tweet.retweeted) {
                 ivRetweet.setImageResource(R.drawable.ic_vector_retweet_green);
             }
 
-            if(tweet.favorited){
+            if (tweet.favorited) {
                 ivFavorite.setImageResource(R.drawable.ic_vector_heart_red);
             }
 
@@ -246,14 +273,14 @@ public class TweetDetailDialogFragment extends DialogFragment {
 
                     client.setFavoriteIcon(new JsonHttpResponseHandler() {
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            if(tweet.favorited) {
+                            if (tweet.favorited) {
                                 ivFavorite.setImageResource(R.drawable.ic_vector_heart);
-                            }else{
+                            } else {
                                 ivFavorite.setImageResource(R.drawable.ic_vector_heart_red);
                             }
                             tweet.favorited = !tweet.favorited;
                             try {
-                                String favoriteCount= response.getString("favorite_count");
+                                String favoriteCount = response.getString("favorite_count");
                                 tvFavorited.setText(favoriteCount);
                                 tweet.setFavoriteCount(Long.parseLong(favoriteCount));
                             } catch (JSONException e) {
@@ -267,12 +294,14 @@ public class TweetDetailDialogFragment extends DialogFragment {
                             Log.d("DEBUG", errorResponse.toString());
                             if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                                 Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
-                                        Toast.LENGTH_LONG).show();
-                            } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
-                                    Toast.LENGTH_LONG).show();
+                                      Toast.LENGTH_LONG).show();
+                            } else {
+                            }
+                            Toast.makeText(getContext(), "TOO MANY REQUESTS",
+                                  Toast.LENGTH_LONG).show();
                         }
 
-                    },tweet.getId(), tweet.favorited);
+                    }, tweet.getId(), tweet.favorited);
 
                 }
             });
@@ -284,14 +313,14 @@ public class TweetDetailDialogFragment extends DialogFragment {
 
                     client.setRetweet(new JsonHttpResponseHandler() {
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            if(tweet.retweeted) {
+                            if (tweet.retweeted) {
                                 ivRetweet.setImageResource(R.drawable.ic_retweet_vector);
-                            }else{
+                            } else {
                                 ivRetweet.setImageResource(R.drawable.ic_vector_retweet_green);
                             }
                             tweet.retweeted = !tweet.retweeted;
                             try {
-                                String reTweetCount= response.getString("retweet_count");
+                                String reTweetCount = response.getString("retweet_count");
                                 tvRetweeted.setText(reTweetCount);
                                 tweet.setRetweetCount(Long.parseLong(reTweetCount));
                             } catch (JSONException e) {
@@ -306,14 +335,16 @@ public class TweetDetailDialogFragment extends DialogFragment {
                             if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                                 Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                                         Toast.LENGTH_LONG).show();
-                            } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
-                                    Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getContext(), "TOO MANY REQUESTS",
+                                        Toast.LENGTH_LONG).show();
+                            }
                         }
 
-                        public void onFailure(int statusCode, Header[] header, String s1, Throwable t1){
+                        public void onFailure(int statusCode, Header[] header, String s1, Throwable t1) {
                             Log.d("DEBUG", s1.toString());
                         }
-                    },tweet.getId(), tweet.retweeted);
+                    }, tweet.getId(), tweet.retweeted);
 
                 }
             });
@@ -324,27 +355,23 @@ public class TweetDetailDialogFragment extends DialogFragment {
     }
 
 
-
     private void populateObjectfromViews() {
         fillRecycleViewReply();
         ComposeTweetDialogListener listener = (ComposeTweetDialogListener) getTargetFragment();
         listener.onFinishComposeTweetDialog(etReplyTweet.getText().toString(), tweet);
-        }
+    }
 
     private void fillRecycleViewReply() {
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
         Tweet responseTweet = new HomeTimelineFragment().constructOfflineTweetUser();
         rlTweetResponse.setVisibility(View.VISIBLE);
         rlReply.setVisibility(View.GONE);
-        Glide.with(getContext()).load(responseTweet.getUser().getProfileImageUrl()).placeholder(R.drawable.ic_launcher).
+        Glide.with(getContext()).load(R.drawable.ic_offline_image).placeholder(R.drawable.ic_launcher).
                 error(R.drawable.ic_launcher).into(ivResponseTweetImage);
         tvResponseUserName.setText(responseTweet.getUser().getName());
         tvResponseHandle.setText(responseTweet.getUser().getScreenName());
         tvResponseBody.setText(etReplyTweet.getText().toString());
 
     }
-
 
 
 }

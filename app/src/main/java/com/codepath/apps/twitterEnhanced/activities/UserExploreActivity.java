@@ -25,7 +25,7 @@ public class UserExploreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_explore);
         ButterKnife.bind(this);
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(findViewById(android.R.id.content).getWindowToken(), 0);
 
 
@@ -49,7 +49,6 @@ public class UserExploreActivity extends AppCompatActivity {
 
             }
         });
-
 
 
     }

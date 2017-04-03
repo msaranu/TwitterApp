@@ -108,7 +108,6 @@ public class UserHeaderFragment extends android.support.v4.app.Fragment {
                         }
                     });
 
-                    //   setImageUrl(ivProfileBackground,user.getProfileBackgroundImageUrl());//backgrondImage
                     if (user == null) {
                         Toast.makeText(getContext(), "NO TWEET MENTIONS",
                                 Toast.LENGTH_LONG).show();
@@ -125,7 +124,8 @@ public class UserHeaderFragment extends android.support.v4.app.Fragment {
                     if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                         Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                                 Toast.LENGTH_LONG).show();
-                    } else Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
+                    } else{}
+                        Toast.makeText(getContext(), "TOO MANY REQUESTS ??",
                             Toast.LENGTH_LONG).show();
                 }
 

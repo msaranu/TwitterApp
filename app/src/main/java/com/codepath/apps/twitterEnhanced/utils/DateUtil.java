@@ -32,23 +32,26 @@ public class DateUtil {
                 relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                         System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
 
-            }else {
+            } else {
                 long dateMillis = sf.parse(rawJsonDate).getTime();
                 relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                         System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
             }
-         /*       String[] splitString = relativeDate.split("\\s+");
-                if (splitString[1]!=null && splitString[1].toUpperCase().equals("SECONDS")) {
+           /* if (relativeDate != null) {
+
+                String[] splitString = relativeDate.split("\\s+");
+                if (splitString[1] != null && splitString[1].toUpperCase().equals("SECONDS")) {
                     relativeDate = splitString[0] + 's';
-                } else if (splitString[1]!=null && splitString[1].toUpperCase().equals("MINUTES")) {
+                } else if (splitString[1] != null && splitString[1].toUpperCase().equals("MINUTES")) {
                     relativeDate = splitString[0] + 'm';
-                } else if (splitString[1]!=null && splitString[1].toUpperCase().equals("HOURS")) {
+                } else if (splitString[1] != null && splitString[1].toUpperCase().equals("HOURS")) {
                     relativeDate = splitString[0] + 'h';
                 }
-                if (splitString[1]!=null && splitString[1].toUpperCase().equals("DAYS")) {
+                if (splitString[1] != null && splitString[1].toUpperCase().equals("DAYS")) {
                     relativeDate = splitString[0] + 'd';
-                }*/
-            } catch (ParseException e1) {
+                }
+            }*/
+        } catch (ParseException e1) {
             e1.printStackTrace();
         }
 

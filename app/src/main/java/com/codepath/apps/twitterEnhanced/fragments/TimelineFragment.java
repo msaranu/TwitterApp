@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.codepath.apps.twitterEnhanced.R;
-import com.codepath.apps.twitterEnhanced.activities.TimelineActivity;
 import com.codepath.apps.twitterEnhanced.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterEnhanced.applications.TwitterApplication;
 import com.codepath.apps.twitterEnhanced.clients.TwitterClient;
@@ -57,8 +56,6 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment
     private EndlessRecyclerViewScrollListener scrollListener;
     @BindView(R.id.swipeContainer) public SwipeRefreshLayout swipeContainer;
     TweetOfflineService tweetofflineservice;
- //   @BindView(R.id.fabComposeTweet)
-  //  FloatingActionButton fabComposeTweet;
     Tweet composeTweet;
     long cursorID = -1;
     TwitterClient client;
@@ -81,15 +78,11 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment
         ButterKnife.bind(this,v);
        setFloatingAction();
 
-       //start Bind date to adapter
-        tweets = new ArrayList<>();
-        adapter = new TweetsArrayAdapter(getActivity(), tweets);
-        rvTweets.setAdapter(adapter);
-        //end bind date to adapter
+       // Bind date to adapter
+        bindDataToAdapter();
 
         setRecyleViewLayout();
-    //   swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
-       setSwipeRefreshLayout(v);
+        setSwipeRefreshLayout(v);
         return v;
     }
 
@@ -180,15 +173,10 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment
 
 
 
-    private void bindDataToAdapter(TimelineActivity timelineActivity) {
-        // fragFilterSettings = new FilterSettings();
-        // Create adapter passing in the sample user data
+    private void bindDataToAdapter() {
         tweets = new ArrayList<>();
         adapter = new TweetsArrayAdapter(getActivity(), tweets);
-        // Attach the adapter to the recyclerview to populate items
         rvTweets.setAdapter(adapter);
-
-
     }
 
 
@@ -253,7 +241,7 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment
                 if (errorResponse.toString().contains("Too Many Requests") || errorResponse.toString().contains("Rate limit exceeded")) {
                     Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
-                } else Toast.makeText(getContext(), "TOO MANY REQUESTS 2 ??",
+                } else Toast.makeText(getContext(), "TOO MANY REQUESTS",
                         Toast.LENGTH_LONG).show();
             }
 
@@ -263,7 +251,7 @@ public abstract class TimelineFragment extends android.support.v4.app.Fragment
                 if (errorResponse.toString().contains("Too Many Requests")) {
                     Toast.makeText(getContext(), "TOO MANY REQUESTS THIS SESSION",
                             Toast.LENGTH_LONG).show();
-                } else Toast.makeText(getContext(), "TOO MANY REQUESTS 3??",
+                } else Toast.makeText(getContext(), "TOO MANY REQUESTS",
                         Toast.LENGTH_LONG).show();
 
             }

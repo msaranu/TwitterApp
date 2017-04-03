@@ -33,7 +33,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         String screenName = getIntent().getStringExtra("screen_name");
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             UserHeaderFragment userHeaderFragment = UserHeaderFragment.newInstance(screenName);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragmentHeader, userHeaderFragment);
@@ -52,7 +52,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
             @Override
             public boolean onMenuItemClick(MenuItem arg0) {
-                if(arg0.getItemId() == R.id.ivToolbarUserProfile){
+                if (arg0.getItemId() == R.id.ivToolbarUserProfile) {
 
                 }
                 return false;
@@ -62,7 +62,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         vpTwitter.setAdapter(new UserProfilePagerAdapter(getSupportFragmentManager(), UserProfileActivity.this, screenName));
         tlTwitter.setupWithViewPager(vpTwitter);
-
 
 
     }

@@ -27,8 +27,7 @@ import static com.codepath.apps.twitterEnhanced.properties.properties.OFFLINE_SC
 import static com.codepath.apps.twitterEnhanced.properties.properties.OFFLINE__NAME;
 
 
-public class TimelineActivity extends AppCompatActivity
-        {
+public class TimelineActivity extends AppCompatActivity {
 
     TweetOfflineService tweetofflineservice;
     Tweet composeTweet;
@@ -59,7 +58,7 @@ public class TimelineActivity extends AppCompatActivity
             @Override
             public boolean onMenuItemClick(MenuItem arg0) {
                 if (arg0.getItemId() == R.id.ivToolbarExplore) {
-                    int x = 0;
+
                 }
                 return false;
             }
@@ -74,16 +73,6 @@ public class TimelineActivity extends AppCompatActivity
         setSupportActionBar(tbTwitter);
         bindChromeIntenttoAdapter();
 
-
-
-   /*     // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(),
-                TimelineActivity.this));
-
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        tabLayout.setupWithViewPager(viewPager); */
 
     }
 
@@ -106,7 +95,7 @@ public class TimelineActivity extends AppCompatActivity
                     t.setText(intentSring);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("TWEET_OBJ", t);
-                  //  onComposeTweet(bundle);
+                    //  onComposeTweet(bundle);
                 }
             }
         }
@@ -129,7 +118,6 @@ public class TimelineActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
@@ -140,7 +128,6 @@ public class TimelineActivity extends AppCompatActivity
         int id = item.getItemId();
         return super.onOptionsItemSelected(item);
     }
-
 
 
     public Tweet constructOfflineTweetUser() {

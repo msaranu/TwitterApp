@@ -68,7 +68,7 @@ public class UserTimelineMediaFragment extends UserTimelineFragment{
                     GsonBuilder gsonBuilder = new GsonBuilder();
                     gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
                     // register type adapters here, specify field naming policy, etc.
-                    Gson gson = gsonBuilder.create();              //  Tweet[] tarray = gson.fromJson(response.toString(),Tweet[].class);
+                    Gson gson = gsonBuilder.create();
                     List<Tweet> tweetList = gson.fromJson(response.toString(), new TypeToken<List<Tweet>>() {
                     }.getType());
                     if (tweetList == null || tweetList.isEmpty() || tweetList.size() == 0) {

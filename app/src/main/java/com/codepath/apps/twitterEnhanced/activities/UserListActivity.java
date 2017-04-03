@@ -33,12 +33,12 @@ public class UserListActivity extends AppCompatActivity {
         String screenName = intent.getStringExtra("screen_name");
         String followers = intent.getStringExtra("followers");
 
-        if(followers != null) {
+        if (followers != null) {
             UserListFollowersFragment userListFollowersFragment = UserListFollowersFragment.newInstance(screenName);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragmentUserList, userListFollowersFragment);
             ft.commit();
-        } else{
+        } else {
             UserListFollowingFragment userListFollowingFragment = UserListFollowingFragment.newInstance(screenName);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.fragmentUserList, userListFollowingFragment);
@@ -47,8 +47,6 @@ public class UserListActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
 }
